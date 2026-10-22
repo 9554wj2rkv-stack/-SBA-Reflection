@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-text="large">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#040d1c">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Moon Reflection">
+<meta name="description" content="Moon Reflection by Soul Blueprint Astrology — your personal space beneath the stars.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/cormorant-sc-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jost-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/images/hero.webp" as="image">
+<link rel="stylesheet" href="css/styles.css">
+<title>Moon Reflection — Soul Blueprint Astrology</title>
+</head>
+<body>
+<a href="#view" class="sr-only">Skip to content</a>
+<div class="scene" id="scene" aria-hidden="true"><div class="sky"></div><div class="mountains"></div></div>
+
+<main id="view" tabindex="-1"></main>
+
+<nav class="tabbar" id="tabbar" aria-label="Main">
+  <button data-route="home"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M4 13 14 4.5 24 13"/><path d="M6.5 11v12.5h15V11"/><path d="M11.5 23.5v-6h5v6"/></svg>HOME</button>
+  <button data-route="moon"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M22.5 17.5A9.5 9.5 0 1 1 11 4.6a7.6 7.6 0 0 0 11.5 12.9z"/></svg>THIS MOON</button>
+  <button data-route="journal"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M14 7.5C11.5 5.6 8 5 4 5.3v15.5c4-.3 7.5.3 10 2.2 2.5-1.9 6-2.5 10-2.2V5.3C20 5 16.5 5.6 14 7.5z"/><path d="M14 7.5V23"/></svg>JOURNAL</button>
+  <button data-route="sba"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><circle cx="14" cy="14" r="10.5"/><path d="M14 6.5l1.6 5.9 5.9 1.6-5.9 1.6L14 21.5l-1.6-5.9L6.5 14l5.9-1.6z" fill="currentColor" fill-opacity=".9"/></svg>SBA</button>
+</nav>
+
+<div class="menu-screen" id="menuScreen" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="scene-menu" aria-hidden="true"><div class="scene"><div class="sky"></div><div class="mountains"></div></div></div>
+  <div class="hdr" style="background:transparent">
+    <button class="hdr-btn" id="menuBack" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="hdr-title">Menu</div>
+    <button class="hdr-btn" id="menuClose" aria-label="Close menu" style="justify-self:end"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <nav class="menu-list" id="menuList"></nav>
+</div>
+<div id="modalRoot"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:2rem;color:#F6F1E9;font-family:sans-serif">Moon Reflection needs JavaScript to run.</p></noscript>
+<script src="js/config.js"></script>
+<script src="js/sky-data.js"></script>
+<script src="js/content.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
