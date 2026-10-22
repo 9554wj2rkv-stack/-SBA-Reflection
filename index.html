@@ -412,6 +412,44 @@ details.d-row .d-body p+p{margin-top:.6rem}
 .r-moon .rm-place{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--gold-2)}
 
 /* =========================================================
+   LUNAR TIMELINE (This Moon)
+   ========================================================= */
+.tl{margin:.3rem 0 .2rem}
+.tl-bar{display:flex;align-items:center;gap:8px;padding:6px;border-radius:999px}
+.tl-bar .btn-round{width:48px;height:48px}
+.tl-bar .btn-round[disabled]{opacity:.28}
+.tl-month{flex:1;min-width:0;min-height:48px;display:flex;align-items:center;justify-content:center;gap:.5rem;border:0;background:transparent;color:var(--text);
+  font-family:var(--serif);font-size:1.3rem;border-radius:999px;white-space:nowrap}
+.tl-month .tl-cal{display:grid;place-items:center;color:var(--gold)}
+.tl-month svg{width:19px;height:19px}
+.tl-hints{display:flex;justify-content:space-between;padding:.35rem 1rem 0;font-size:.74rem;letter-spacing:.06em;color:var(--muted);min-height:1.2rem}
+.tl-return{display:flex;margin:.6rem auto 0;min-height:46px;font-size:.92rem;padding:.4rem 1.2rem}
+.tl-return svg{width:18px;height:18px;color:var(--gold)}
+.stage-badges{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin:-.4rem 0 .7rem}
+.badge.muted-badge{border-color:rgba(210,216,226,.35);color:var(--text-2);background:rgba(210,216,226,.06)}
+.moon-stage .time{font-size:.86rem;color:var(--text-2);margin-top:.15rem;letter-spacing:.04em}
+.moon-stage .rel{font-size:.82rem;color:var(--gold-2);margin-top:.25rem;letter-spacing:.04em}
+.slide-l{animation:slideL .38s ease both}
+.slide-r{animation:slideR .38s ease both}
+@keyframes slideL{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+.coming-soon{text-align:center;margin-top:1rem}
+.coming-soon .serif-lead{margin:.75rem 0 .5rem}
+.ev-entries-h{margin:1.2rem 0 .55rem;text-align:center}
+.e-row .e-written{font-size:.76rem;color:var(--muted)}
+.rm-when{font-size:.78rem;color:var(--muted)}
+.gd-moon{font-size:.86rem;color:var(--text-2);margin:-.6rem 0 1.1rem}
+.tl-selects{display:flex;gap:10px;margin-bottom:1rem}
+.sel{flex:1;min-width:0;min-height:52px;border-radius:14px;border:1px solid var(--gold-line);background-color:rgba(6,16,34,.75);color:var(--text);
+  padding:0 2.3rem 0 .95rem;font-size:1rem;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E7B96E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .8rem center;background-size:16px}
+.sel-year{flex:0 0 7.2rem}
+.sel option{background:#0a1a33;color:#F6F1E9}
+.tl-picklist .e-row{margin-bottom:8px}
+.tl-picklist .moon-img{width:48px}
+
+/* =========================================================
    Tab bar
    ========================================================= */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);max-width:none;
@@ -477,7 +515,7 @@ html[data-motion="reduce"] *{animation:none!important;transition:none!important}
 <script>
 'use strict';
 /* =====================================================================
-   MOON REFLECTION — Soul Blueprint Astrology · Version 1.2
+   MOON REFLECTION — Soul Blueprint Astrology · Version 1.3
    Single-file vanilla JS app. No build step, no external services.
    Journal data is stored ONLY in this browser's localStorage.
    ===================================================================== */
@@ -487,7 +525,7 @@ html[data-motion="reduce"] *{animation:none!important;transition:none!important}
    ===================================================================== */
 const CONFIG = {
   APP_NAME: 'Moon Reflection',
-  VERSION: '1.2.0',
+  VERSION: '1.3.0',
 
   /* ------------------------------------------------------------------
      SBA WEBSITE URL — the ONE place to configure the future website.
@@ -498,6 +536,17 @@ const CONFIG = {
   SBA_WEBSITE_URL: '',
   /* Contact link for the menu (mailto: or https:). Empty = Coming soon. */
   CONTACT_URL: '',
+
+  /* Guidance. SBA interpretations live in SBA_INTERPRETATIONS. Events without
+     one show "Guidance coming soon". Set to true ONLY to preview the
+     demonstration guidance while testing — it is not official SBA content. */
+  SHOW_DEMO_GUIDANCE: false,
+
+  /* Lunar Timeline range (UTC dates). Expand by changing these two values.
+     Verified Sun/Moon placements currently cover 2020–2045; events outside
+     that span show "Position pending verification". */
+  TIMELINE_START: '2020-01-01',
+  TIMELINE_END: '2046-01-01',
 
   CURRENT_EVENT_WINDOW_DAYS: 3.5,
   AUTOSAVE_DELAY_MS: 700,
@@ -576,6 +625,7 @@ const ICONS = {
   bulb: S('<path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3.5a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17h5.2v-.7c0-.8.4-1.5 1-2A6 6 0 0 0 12 3.5z"/>'),
   bookmark: S('<path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/>'),
   check: S('<path d="M4.5 12.5l5 5L19.5 7"/>', 1.8),
+  calendar: S('<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="12" cy="14.5" r="1.6" fill="currentColor"/>'),
   home: S('<path d="M3.5 11 12 3.8 20.5 11"/><path d="M5.5 9.5v11h13v-11"/><path d="M10 20.5v-5h4v5"/>'),
   info: S('<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.2"/>', 1.5),
   gear: S('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>'),
@@ -646,7 +696,7 @@ function astroEvent(k, date) {
 function lunarEventsBetween(start, end) {
   const k0 = Math.floor((dateToJD(start) - 2451550.09766) / SYNODIC_MONTH) - 1;
   const out = [];
-  for (let k = k0; out.length < 400; k += 0.5) {
+  for (let k = k0; out.length < 5000; k += 0.5) { // safety cap (~200 years)
     const d = jdeToDate(meeusTruePhase(k));
     if (d > end) break;
     if (d >= start) out.push(astroEvent(k, d));
@@ -847,6 +897,25 @@ const DEMO_INTERPRETATIONS = {
 };
 const RELEASE_QUESTION_INDEX = 2; // the "ready to stop carrying" question
 
+/* General reflection questions — used when a Moon has no completed SBA
+   interpretation yet. They are open prompts, not astrological guidance.
+   (Full Moon questions are the examples from the original Moon Reflection brief.) */
+const GENERAL_SYSTEM = 'General reflection questions — SBA guidance coming soon';
+const GENERAL_QUESTIONS = {
+  full: [
+    'What am I forcing that would benefit from patience?',
+    'Where am I putting other people’s needs ahead of my own?',
+    'What am I ready to stop carrying?',
+    'What one decision would bring me closer to the life I want?'
+  ],
+  new: [
+    'What would I like to grow during this lunar cycle?',
+    'What small step could I take this week?',
+    'What am I ready to stop carrying into this new cycle?',
+    'How do I want to feel when this cycle closes?'
+  ]
+};
+
 /* Compose demonstration guidance from BOTH verified placements and how they
    interact. Returns null if either placement is unverified. */
 function placementInterpretation(type, sky) {
@@ -897,8 +966,9 @@ const normItem = it => (typeof it === 'string' ? { title: '', text: it } : { tit
 function buildLunarEvent(a) {
   const sba = SBA_INTERPRETATIONS[a.id];
   const sky = skyPositions(a.id);
-  const composed = sba ? null : placementInterpretation(a.type, sky);
-  const interp = sba || composed || DEMO_INTERPRETATIONS[a.type];
+  const demo = !sba && CONFIG.SHOW_DEMO_GUIDANCE ? (placementInterpretation(a.type, sky) || DEMO_INTERPRETATIONS[a.type]) : null;
+  const interp = sba || demo;                       // null → "Guidance coming soon"
+  const ownQuestions = !!(interp && Array.isArray(interp.questions) && interp.questions.length >= 4);
   return {
     id: a.id,
     dateTime: a.iso,
@@ -911,18 +981,19 @@ function buildLunarEvent(a) {
       constellation: placeName(sky.moon)
     },
     sky,
-    interpretationSystem: sba ? 'Soul Blueprint Astrology' : (composed ? 'Demonstration content based on the verified true-sky placements — awaiting SBA interpretations' : 'Demonstration content — awaiting final SBA interpretations'),
-    isDemo: !sba,
-    placementBased: !!(sba || composed),
-    theme: interp.theme,
-    intro: interp.intro,
-    lookOut: interp.lookOut.map(normItem),
-    letGo: interp.letGo.map(normItem),
-    letIn: interp.letIn.map(normItem),
-    lessons: Object.assign({}, interp.lessons || {}),
-    release: interp.release,
-    invitation: interp.invitation,
-    questions: interp.questions.slice(0, 4)
+    hasGuidance: !!interp,
+    interpretationSystem: sba ? 'Soul Blueprint Astrology' : (demo ? 'Demonstration content — not official SBA guidance' : 'Guidance coming soon'),
+    isDemo: !!demo,
+    generalQuestions: !ownQuestions,
+    theme: interp ? interp.theme || '' : '',
+    intro: interp ? interp.intro || '' : '',
+    lookOut: interp ? (interp.lookOut || []).map(normItem) : [],
+    letGo: interp ? (interp.letGo || []).map(normItem) : [],
+    letIn: interp ? (interp.letIn || []).map(normItem) : [],
+    lessons: interp ? Object.assign({}, interp.lessons || {}) : {},
+    release: interp ? interp.release || '' : '',
+    invitation: interp ? interp.invitation || '' : '',
+    questions: (ownQuestions ? interp.questions : GENERAL_QUESTIONS[a.type]).slice(0, 4)
   };
 }
 
@@ -941,6 +1012,44 @@ function getLunarContext(now = new Date()) {
   } catch (err) {
     return { status: 'unavailable', reason: err.message || String(err) };
   }
+}
+
+/* =====================================================================
+   2c. LUNAR TIMELINE — every New and Full Moon in the configured range.
+   Event IDs (e.g. 'full-moon-2026-10-26') are stable: journal entries are
+   linked to them, so reflections for different Moons never overwrite.
+   ===================================================================== */
+let TIMELINE = null;
+function timeline() {
+  if (TIMELINE) return TIMELINE;
+  const list = lunarEventsBetween(new Date(CONFIG.TIMELINE_START + 'T00:00:00Z'), new Date(CONFIG.TIMELINE_END + 'T00:00:00Z'));
+  const index = {};
+  list.forEach((e, i) => { index[e.id] = i; });
+  TIMELINE = { list, index };
+  return TIMELINE;
+}
+function timelineEvent(id) { const t = timeline(); const i = t.index[id]; return i == null ? null : t.list[i]; }
+function timelineNeighbour(id, step) { const t = timeline(); const i = t.index[id]; return i == null ? null : (t.list[i + step] || null); }
+function eventsInMonth(year, month) { return timeline().list.filter(e => e.date.getFullYear() === year && e.date.getMonth() === month); }
+function eventHasGuidance(id) { const ev = timelineEvent(id); return !!(ev && buildLunarEvent(ev).hasGuidance); }
+
+/* "in 4 days", "3 months ago" */
+function relTime(date, now = new Date()) {
+  let rtf = null;
+  try { rtf = new Intl.RelativeTimeFormat(CONFIG.LOCALE, { numeric: 'auto' }); } catch (e) { return ''; }
+  const days = (date - now) / 864e5, ad = Math.abs(days);
+  if (ad < 1) { const hrs = Math.round(days * 24); return hrs === 0 ? 'now' : rtf.format(hrs, 'hour'); }
+  if (ad < 45) return rtf.format(Math.round(days), 'day');
+  if (ad < 548) return rtf.format(Math.round(days / 30.44), 'month');
+  return rtf.format(Math.round(days / 365.25), 'year');
+}
+/* "Written 4 days before this Moon" */
+function relationToMoon(when, eventDate, verb = 'Written') {
+  const d = (when - eventDate) / 864e5;
+  if (Math.abs(d) < 1) return `${verb} on the day of this Moon`;
+  const n = Math.round(Math.abs(d));
+  const amount = n >= 60 ? `${Math.round(n / 30.44)} months` : `${n} day${n === 1 ? '' : 's'}`;
+  return `${verb} ${amount} ${d < 0 ? 'before' : 'after'} this Moon`;
 }
 
 /* =====================================================================
@@ -1059,7 +1168,7 @@ function closeMenu(silent) {
 }
 
 /* Modal (returns a Promise with the chosen action value) */
-function showModal({ title, body, actions }) {
+function showModal({ title, body, actions, onMount }) {
   return new Promise(resolve => {
     const root = $('#modalRoot');
     const prevFocus = document.activeElement;
@@ -1075,6 +1184,7 @@ function showModal({ title, body, actions }) {
     const wrap = h('div', { class: 'modal-wrap', onclick: e => { if (e.target === wrap) close(null); } }, modal);
     root.append(wrap);
     document.addEventListener('keydown', onKey);
+    if (onMount) onMount(close);
     setTimeout(() => { const f = acts.querySelector('button'); f && f.focus(); }, 30);
   });
 }
@@ -1156,8 +1266,15 @@ function renderHome(view) {
   view.append(body);
 }
 
-/* ---------- 2. THIS MOON — overview ---------- */
-function renderThisMoon(view) {
+/* ---------- 2. THIS MOON — overview + Lunar Timeline ---------- */
+let timelineFocus = null;   // which arrow to re-focus after moving (keyboard users)
+let timelineDir = null;     // 'next' | 'prev' — gentle slide direction
+function goTimeline(ev, dir) {
+  if (!ev) return;
+  timelineFocus = dir; timelineDir = dir;
+  go('moon/' + ev.id, { replace: true });
+}
+function renderThisMoon(view, args) {
   const ctx = getLunarContext();
   view.append(header('This Moon'));
   const s = h('section', { class: 'screen fade-in' });
@@ -1167,28 +1284,141 @@ function renderThisMoon(view) {
       h('button', { class: 'btn-line block', onclick: () => go('journal'), text: 'Open my reflections' }));
     view.append(s); return;
   }
-  const e = ctx.event;
-  s.append(h('div', { class: 'moon-stage' },
+  const reqId = args && args[0];
+  let e = ctx.event;
+  if (reqId && reqId !== ctx.event.id) {
+    const found = timelineEvent(reqId);
+    if (!found) {
+      s.append(h('div', { class: 'glass strong card', style: 'text-align:center;margin-top:1rem' },
+        h('h1', { class: 'page-title', style: 'font-size:1.6rem', text: 'Moon not found' }),
+        h('p', { class: 'muted small', text: 'This lunar event is outside the timeline range or the link is not valid.' }),
+        h('button', { class: 'btn-gold block', style: 'margin-top:1rem', onclick: () => go('moon', { replace: true }), html: '<span>Return to Current Moon</span>' + ICONS.arrowR })));
+      view.append(s); return;
+    }
+    e = buildLunarEvent(found);
+  }
+  const isCurrent = e.id === ctx.event.id;
+  const statusText = isCurrent ? (ctx.status === 'current' ? 'This Moon' : 'Upcoming') : (e.date > new Date() ? 'Upcoming' : 'Past Moon');
+
+  s.append(timelineBar(e, isCurrent));
+
+  const stage = h('div', { class: 'moon-stage' + (timelineDir === 'next' ? ' slide-l' : timelineDir === 'prev' ? ' slide-r' : '') },
     moonImg(e.type, '', typeLabel(e.type)),
+    h('div', { class: 'stage-badges' }, h('span', { class: 'badge' + (isCurrent ? '' : ' muted-badge'), text: statusText }),
+      e.isDemo ? h('span', { class: 'badge demo', text: 'Demo guidance' }) : null),
     h('h1', { text: typeLabel(e.type) }),
     e.sky.moon.verified ? h('div', { class: 'sub-serif', text: 'in ' + e.sky.moon.constellation }) : null,
-    h('p', { class: 'date', text: fmtDate(e.date) + ' · ' + fmtTimeTz(e.date) }),
-    h('div', { style: 'margin-top:.7rem' }, h('span', { class: 'badge', text: ctx.status === 'current' ? 'This Moon' : 'Upcoming' }), ' ',
-      e.isDemo ? h('span', { class: 'badge demo', text: 'Demo guidance' }) : null)));
+    h('p', { class: 'date', text: fmt(e.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) }),
+    h('p', { class: 'time', text: fmtTimeTz(e.date) + ' · ' + TIME_ZONE }),
+    h('p', { class: 'rel', text: capitalise(relTime(e.date)) }));
+  timelineDir = null;
+  addSwipe(stage, () => goTimeline(timelineNeighbour(e.id, 1), 'next'), () => goTimeline(timelineNeighbour(e.id, -1), 'prev'));
+  s.append(stage);
   s.append(placementLabels(e.sky));
-  s.append(h('p', { class: 'theme', text: e.theme }));
-  s.append(h('p', { class: 'intro', text: e.intro }));
 
-  const row = (icon, label, key) => {
-    const b = h('button', { class: 'g-row glass', onclick: () => go('guide/' + key) }, ci(icon, true), h('span', { class: 'g-label', text: label }), chev());
-    return b;
-  };
-  s.append(row('eye', 'What to look out for', 'look'), row('leaf', 'What to let go of', 'go'), row('sparkle', 'What to let in', 'in'));
+  if (e.hasGuidance) {
+    if (e.theme) s.append(h('p', { class: 'theme', text: e.theme }));
+    if (e.intro) s.append(h('p', { class: 'intro', text: e.intro }));
+    const row = (icon, label, key) => h('button', { class: 'g-row glass', onclick: () => go('guide/' + key + '/' + e.id) }, ci(icon, true), h('span', { class: 'g-label', text: label }), chev());
+    s.append(row('eye', 'What to look out for', 'look'), row('leaf', 'What to let go of', 'go'), row('sparkle', 'What to let in', 'in'));
+  } else s.append(comingSoonCard());
+
   s.append(reflectionStarter(e));
-  if (e.isDemo) s.append(h('p', { class: 'tiny', style: 'text-align:center;margin-top:1rem', text: 'The date is calculated astronomically. The guidance and questions are demonstration content, not official Soul Blueprint Astrology interpretations. Astrological guidance is offered as symbolic reflection, not prediction.' }));
+  const list = eventEntries(e); if (list) s.append(list);
+  if (e.isDemo) s.append(h('p', { class: 'tiny', style: 'text-align:center;margin-top:1rem', text: 'The date and placements are calculated astronomically. The guidance shown is demonstration content, not official Soul Blueprint Astrology interpretation.' }));
   s.append(skyDetails(e));
   s.append(h('div', { class: 'spacer-art' }));
   view.append(s);
+
+  if (timelineFocus) {
+    const btn = document.getElementById(timelineFocus === 'prev' ? 'tlPrev' : 'tlNext');
+    if (btn && !btn.disabled) btn.focus({ preventScroll: true });
+    timelineFocus = null;
+  }
+}
+const capitalise = t => (t ? t.charAt(0).toUpperCase() + t.slice(1) : '');
+
+function timelineBar(e, isCurrent) {
+  const prev = timelineNeighbour(e.id, -1), next = timelineNeighbour(e.id, 1);
+  const longLabel = ev => `${typeLabel(ev.type)}, ${fmtDate(ev.date)}`;
+  const shortLabel = ev => `${ev.type === 'full' ? 'Full' : 'New'} · ${fmt(ev.date, { day: 'numeric', month: 'short' })}`;
+  const prevBtn = h('button', { class: 'btn-round tl-arrow', id: 'tlPrev', html: ICONS.arrowL,
+    'aria-label': prev ? 'Previous Moon: ' + longLabel(prev) : 'No earlier Moons in the timeline', onclick: () => goTimeline(prev, 'prev') });
+  const nextBtn = h('button', { class: 'btn-round tl-arrow', id: 'tlNext', html: ICONS.arrowR,
+    'aria-label': next ? 'Next Moon: ' + longLabel(next) : 'No later Moons in the timeline', onclick: () => goTimeline(next, 'next') });
+  prevBtn.disabled = !prev; nextBtn.disabled = !next;
+  const month = h('button', { class: 'tl-month', 'aria-label': 'Choose a month and year. Showing ' + fmt(e.date, { month: 'long', year: 'numeric' }), onclick: () => openMonthPicker(e) },
+    h('span', { text: fmt(e.date, { month: 'long', year: 'numeric' }) }), h('span', { class: 'tl-cal', html: ICONS.calendar }));
+  const box = h('div', { class: 'tl' },
+    h('div', { class: 'tl-bar glass', role: 'group', 'aria-label': 'Lunar timeline' }, prevBtn, month, nextBtn),
+    h('div', { class: 'tl-hints', 'aria-hidden': 'true' }, h('span', { text: prev ? shortLabel(prev) : '' }), h('span', { text: next ? shortLabel(next) : '' })));
+  if (!isCurrent) box.append(h('button', { class: 'btn-line tl-return', onclick: () => { timelineFocus = null; go('moon', { replace: true }); }, html: ICONS.crescent + '<span>Return to Current Moon</span>' }));
+  return box;
+}
+
+/* Optional enhancement: swipe left/right on the Moon to move through the timeline */
+function addSwipe(el, onLeft, onRight) {
+  let x0 = null, y0 = 0, t0 = 0;
+  el.addEventListener('touchstart', ev => { if (ev.touches.length !== 1) { x0 = null; return; } x0 = ev.touches[0].clientX; y0 = ev.touches[0].clientY; t0 = Date.now(); }, { passive: true });
+  el.addEventListener('touchend', ev => {
+    if (x0 == null) return;
+    const t = ev.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
+    if (Math.abs(dx) > 60 && Math.abs(dy) < Math.abs(dx) * 0.6 && Date.now() - t0 < 900) (dx < 0 ? onLeft : onRight)();
+  }, { passive: true });
+}
+
+async function openMonthPicker(e) {
+  const t = timeline();
+  const first = t.list[0].date, last = t.list[t.list.length - 1].date;
+  const years = []; for (let y = first.getFullYear(); y <= last.getFullYear(); y++) years.push(y);
+  const mSel = h('select', { class: 'sel', 'aria-label': 'Month' }, Array.from({ length: 12 }, (_, i) => h('option', { value: String(i), text: fmt(new Date(2000, i, 1), { month: 'long' }) })));
+  const ySel = h('select', { class: 'sel sel-year', 'aria-label': 'Year' }, years.map(y => h('option', { value: String(y), text: String(y) })));
+  mSel.value = String(e.date.getMonth()); ySel.value = String(e.date.getFullYear());
+  const list = h('div', { class: 'tl-picklist', 'aria-live': 'polite' });
+  let closeFn = null;
+  const paint = () => {
+    list.innerHTML = '';
+    const evs = eventsInMonth(+ySel.value, +mSel.value);
+    if (!evs.length) { list.append(h('p', { class: 'tiny', text: 'No New or Full Moons in this month within the timeline range.' })); return; }
+    evs.forEach(ev => {
+      const n = Journal.forEvent(ev.id).length;
+      list.append(h('button', { class: 'e-row glass tl-pick', onclick: () => closeFn && closeFn('moon/' + ev.id) },
+        moonImg(ev.type),
+        h('div', { class: 'e-main' },
+          h('div', { class: 'e-title', text: typeLabel(ev.type) }),
+          h('div', { class: 'e-date', text: fmt(ev.date, { weekday: 'short', day: 'numeric', month: 'long' }) + ' · ' + fmtTime(ev.date) }),
+          ev.id === e.id ? h('div', { class: 'e-written', text: 'Currently showing' }) : null,
+          n ? h('div', { class: 'e-state', text: n === 1 ? 'You have a reflection for this Moon' : `You have ${n} reflections for this Moon` }) : null),
+        chev()));
+    });
+  };
+  mSel.addEventListener('change', paint); ySel.addEventListener('change', paint); paint();
+  const body = h('div', null, h('div', { class: 'tl-selects' }, mSel, ySel), list,
+    h('p', { class: 'tiny', style: 'margin-top:.6rem', text: `Timeline: ${fmt(first, { month: 'long', year: 'numeric' })} – ${fmt(last, { month: 'long', year: 'numeric' })}` }));
+  const res = await showModal({ title: 'Jump to a Moon', body, actions: [{ label: 'Close', value: null }], onMount: c => { closeFn = c; } });
+  if (res) { timelineDir = null; go(res, { replace: true }); }
+}
+
+function comingSoonCard() {
+  return h('div', { class: 'glass strong card coming-soon' },
+    h('span', { class: 'badge', text: 'Guidance coming soon' }),
+    h('p', { class: 'serif-lead', text: 'The Soul Blueprint Astrology guidance for this Moon is being prepared.' }),
+    h('p', { class: 'muted small', text: 'What to look out for, what to let go of, what to let in, the release statement and your invitation will appear here once the SBA interpretation is complete. You can already reflect with four general questions — your answers stay linked to this Moon.' }));
+}
+
+/* Reflections already written for this specific Moon */
+function eventEntries(e) {
+  const entries = Journal.forEvent(e.id);
+  if (!entries.length) return null;
+  const box = h('div', { class: 'ev-entries' }, h('div', { class: 'label ev-entries-h', text: entries.length > 1 ? 'Your reflections for this Moon' : 'Your reflection for this Moon' }));
+  entries.forEach(en => box.append(h('button', { class: 'e-row glass', onclick: () => go('entry/' + en.id) },
+    ci('bookmark', true),
+    h('div', { class: 'e-main' },
+      h('div', { class: 'e-title', text: 'Written ' + fmtShort(new Date(en.createdAt)) }),
+      h('div', { class: 'e-date', text: relationToMoon(new Date(en.createdAt), new Date(en.eventDate)) }),
+      h('div', { class: 'e-state', text: (en.completed ? 'Complete' : 'In progress') + ` · ${Journal.answeredCount(en)} of ${en.questions.length} answered` })),
+    chev())));
+  return box;
 }
 
 function reflectionStarter(e) {
@@ -1234,7 +1464,7 @@ function skyDetails(e) {
     row('Sun ecliptic longitude', deg(sky.sun.eclipticLongitude)),
     h('p', { class: 'sd-h', text: 'Method' }),
     h('p', { text: `Event time: ${e.astronomy.method}, ${e.astronomy.accuracy}. Placements: ${SKY_SYSTEM.source}; ${SKY_SYSTEM.boundaries}. ${SKY_SYSTEM.frame}. Verified when both calculations agree and no boundary is crossed within ±5 minutes of the event. Coverage ${SKY_SYSTEM.coverage}.` }),
-    e.isDemo ? h('p', { text: 'Guidance: ' + e.interpretationSystem + '. Constellation themes are drawn from each figure’s traditional imagery and offered as symbolic reflection, not prediction.' }) : null);
+    h('p', { text: 'Guidance: ' + e.interpretationSystem + '.' + (e.generalQuestions ? ' Reflection questions: general questions until SBA questions are added.' : '') }));
   d.append(body);
   return d;
 }
@@ -1249,20 +1479,32 @@ function renderGuide(view, args) {
   const ctx = getLunarContext();
   const key = GUIDE_SECTIONS[args[0]] ? args[0] : 'look';
   const sec = GUIDE_SECTIONS[key];
-  view.append(header('This Moon', { back: 'moon' }));
+  const id = args[1];
+  view.append(header('This Moon', { back: id ? 'moon/' + id : 'moon' }));
   const s = h('section', { class: 'screen fade-in' });
   if (ctx.status === 'unavailable') { s.append(h('h1', { class: 'sr-only', text: sec.title }), unavailableCard(ctx)); view.append(s); return; }
-  const e = ctx.event;
+  let e = ctx.event;
+  if (id && id !== ctx.event.id) {
+    const found = timelineEvent(id);
+    if (!found) { s.append(h('h1', { class: 'page-title', text: 'Moon not found' }), h('button', { class: 'btn-gold block', onclick: () => go('moon', { replace: true }), text: 'Return to Current Moon' })); view.append(s); return; }
+    e = buildLunarEvent(found);
+  }
   s.append(h('div', { class: 'gd-head' }, ci(sec.icon), h('h1', { text: sec.title })));
-  if (e.isDemo) s.append(h('p', { style: 'margin:-.6rem 0 1rem' }, h('span', { class: 'badge demo', text: 'Demo guidance' })));
+  s.append(h('p', { class: 'gd-moon', text: `${typeLabel(e.type)} · ${fmtDate(e.date)}` + (e.sky.moon.verified ? ` · Moon in ${e.sky.moon.constellation}` : '') }));
+  if (!e.hasGuidance) {
+    s.append(comingSoonCard(), reflectionStarter(e), h('div', { class: 'spacer-art' }));
+    view.append(s); return;
+  }
+  if (e.isDemo) s.append(h('p', { style: 'margin:-.4rem 0 1rem' }, h('span', { class: 'badge demo', text: 'Demo guidance' })));
   s.append(h('ul', { class: 'gd-list' }, sec.items(e).map(it => h('li', null, it.title ? h('strong', { text: it.title + ' ' }) : null, it.text))));
   const l = sec.lesson(e);
-  if (l) s.append(h('div', { class: 'lesson glass' }, ci('sparkle', true),
+  if (l && l.text) s.append(h('div', { class: 'lesson glass' }, ci('sparkle', true),
     h('div', null, l.kind ? h('div', { class: 'lesson-kind', text: l.kind }) : null, h('p', { class: 'l-text' + (l.statement ? ' statement' : ''), text: l.text }))));
   const keys = Object.keys(GUIDE_SECTIONS), i = keys.indexOf(key);
   const nav = h('div', { class: 'gd-nav' });
-  if (i > 0) nav.append(h('button', { class: 'btn-line', onclick: () => go('guide/' + keys[i - 1], { replace: true }), text: '← ' + GUIDE_SECTIONS[keys[i - 1]].title.replace('What to ', '') }));
-  if (i < keys.length - 1) nav.append(h('button', { class: 'btn-line', onclick: () => go('guide/' + keys[i + 1], { replace: true }), text: GUIDE_SECTIONS[keys[i + 1]].title.replace('What to ', '') + ' →' }));
+  const path = k => 'guide/' + k + '/' + e.id;
+  if (i > 0) nav.append(h('button', { class: 'btn-line', onclick: () => go(path(keys[i - 1]), { replace: true }), text: '← ' + GUIDE_SECTIONS[keys[i - 1]].title.replace('What to ', '') }));
+  if (i < keys.length - 1) nav.append(h('button', { class: 'btn-line', onclick: () => go(path(keys[i + 1]), { replace: true }), text: GUIDE_SECTIONS[keys[i + 1]].title.replace('What to ', '') + ' →' }));
   s.append(nav, reflectionStarter(e), h('div', { class: 'spacer-art' }));
   view.append(s);
 }
@@ -1331,11 +1573,13 @@ function renderReflect(view, args) {
     h('div', { class: 'reflect-body' },
       h('div', { class: 'r-moon' }, moonImg(entry.eventType),
         h('div', null, h('div', { class: 'rm-kind', text: typeLabel(entry.eventType) }), h('div', { class: 'rm-date', text: fmtDate(new Date(entry.eventDate)) }),
-          h('div', { class: 'rm-place', text: placementLine(skyPositions(entry.eventId)) }))),
+          h('div', { class: 'rm-place', text: placementLine(skyPositions(entry.eventId)) }),
+          h('div', { class: 'rm-when', text: relationToMoon(new Date(entry.createdAt), new Date(entry.eventDate), 'Started') }))),
       h('div', { class: 'r-progress', role: 'presentation' }, bar),
       h('div', { class: 'r-count' }, countN, dots),
       qText,
-      entry.interpretation && entry.interpretation.isDemo ? h('p', { class: 'tiny', style: 'margin:-.6rem 0 .6rem', text: 'Demonstration question' }) : null,
+      entry.interpretation && entry.interpretation.isDemo ? h('p', { class: 'tiny', style: 'margin:-.6rem 0 .6rem', text: 'Demonstration question' })
+        : (entry.interpretation && /^General/.test(entry.interpretation.system || '') ? h('p', { class: 'tiny', style: 'margin:-.6rem 0 .6rem', text: 'General reflection question · SBA guidance coming soon' }) : null),
       wrap,
       h('div', { class: 'hint glass' }, ci('bulb', true), h('p', { text: 'Allow yourself to be honest. There are no right or wrong answers. This is your personal space.' }))),
     h('div', { class: 'reflect-foot' }, prevBtn, nextBtn));
@@ -1442,7 +1686,9 @@ const releaseRead = new Set();
 function renderComplete(view, args) {
   const entry = Journal.get(args[0]);
   if (!entry) { go('journal', { replace: true }); return; }
-  view.append(header('Reflection Complete', { back: 'moon' }));
+  const moonPath = timelineEvent(entry.eventId) ? 'moon/' + entry.eventId : 'moon';
+  const guidanceReady = eventHasGuidance(entry.eventId);
+  view.append(header('Reflection Complete', { back: moonPath }));
   const s = h('section', { class: 'screen complete fade-in' });
   const stored = Journal.isStoredAsShown(entry);
   s.insertAdjacentHTML('beforeend', crescentArt());
@@ -1460,13 +1706,14 @@ function renderComplete(view, args) {
   const answered = Journal.answeredCount(entry);
   const steps = h('div', { class: 'steps glass' }, h('h2', { text: 'Your next steps' }),
     step('bookmark', stored ? `Saved to your journal · ${answered} of ${entry.questions.length} answered` : 'Save your reflections to your journal', stored, () => go('journal'), 'View my reflections'),
-    step('leaf', 'Read your release statement', releaseRead.has(entry.id), async () => {
+    entry.interpretation.release ? step('leaf', 'Read your release statement', releaseRead.has(entry.id), async () => {
       await showModal({ title: 'My release statement', body: [entry.interpretation.release, entry.interpretation.isDemo ? '(Demonstration statement)' : ''], actions: [{ label: 'Close', value: null }] });
       releaseRead.add(entry.id); render();
-    }, 'Read my release statement'),
-    step('sparkle', 'Explore what to let in', false, () => go('guide/in'), 'Explore what to let in'));
+    }, 'Read my release statement') : null,
+    guidanceReady ? step('sparkle', 'Explore what to let in', false, () => go('guide/in/' + entry.eventId), 'Explore what to let in')
+      : step('sparkle', 'Guidance for this Moon is coming soon', false, () => go(moonPath), 'Open this Moon'));
   s.append(steps);
-  s.append(h('button', { class: 'btn-gold block', style: 'max-width:340px;margin:0 auto', onclick: () => go('moon'), html: '<span>Back to This Moon</span>' + ICONS.arrowR }));
+  s.append(h('button', { class: 'btn-gold block', style: 'max-width:340px;margin:0 auto', onclick: () => go(moonPath), html: '<span>Back to This Moon</span>' + ICONS.arrowR }));
   s.append(h('div', { style: 'margin-top:.6rem' }, h('button', { class: 'text-link', onclick: () => go('journal'), text: 'View my reflections' })));
   view.append(s);
 }
@@ -1484,6 +1731,7 @@ function renderEntry(view, args) {
   s.append(h('div', { class: 'r-moon' }, moonImg(entry.eventType),
     h('div', null, h('h1', { class: 'rm-kind', text: typeLabel(entry.eventType) }), h('div', { class: 'rm-date', text: fmtDate(new Date(entry.eventDate)) }),
       h('div', { class: 'rm-place', text: placementLine(skyPositions(entry.eventId)) }),
+      h('div', { class: 'tiny', text: `Written ${fmtShort(new Date(entry.createdAt))} · ${relationToMoon(new Date(entry.createdAt), new Date(entry.eventDate)).replace(/^Written /, '')}` }),
       h('div', { class: 'tiny', text: `Last edited ${fmtShort(new Date(entry.updatedAt))}` }))));
   s.append(h('div', { style: 'display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem' },
     h('span', { class: 'badge' + (entry.completed ? ' ok' : ''), text: entry.completed ? 'Complete' : 'In progress' }),
@@ -1499,6 +1747,7 @@ function renderEntry(view, args) {
   if (entry.interpretation.invitation) s.append(h('div', { class: 'lesson glass' }, ci('sparkle', true), h('div', null, h('div', { class: 'lesson-kind', text: 'Your invitation' }), h('p', { class: 'l-text statement', text: entry.interpretation.invitation }))));
   s.append(h('div', { class: 'stack', style: 'margin:1rem 0' },
     h('button', { class: 'btn-gold block', onclick: () => go(`reflect/${entry.id}/0`), html: '<span>Edit this reflection</span>' + ICONS.arrowR }),
+    timelineEvent(entry.eventId) ? h('button', { class: 'btn-line block', onclick: () => go('moon/' + entry.eventId), text: 'Open this Moon in the timeline' }) : null,
     h('button', { class: 'btn-line danger block', onclick: () => confirmDelete(entry), text: 'Delete this reflection' })));
   s.append(h('div', { class: 'spacer-art' }));
   view.append(s);
@@ -1587,7 +1836,8 @@ function renderAbout(view) {
     h('p', { class: 'muted small', text: 'Astrological guidance is offered as symbolic reflection — not as prediction or a scientifically proven psychological effect.' })));
   s.append(h('div', { class: 'glass card' }, h('h3', { text: 'How dates are calculated' }),
     h('p', { class: 'muted small', text: 'New and Full Moon times are calculated on your device using the Meeus lunar-phase algorithm (typically within 1–2 minutes), shown in your time zone (' + TIME_ZONE + '). Sun and Moon placements use the true-sky astronomical constellations (IAU boundaries), computed with ' + SKY_SYSTEM.source + ', for ' + SKY_SYSTEM.coverage + '. Placements that could not be verified show “' + PENDING_TEXT + '”.' }),
-    h('p', { class: 'muted small', text: 'Guidance: ' + (Object.keys(SBA_INTERPRETATIONS).length ? 'SBA interpretations where available, demonstration content elsewhere.' : 'demonstration content until SBA interpretations are added.') })));
+    h('p', { class: 'muted small', text: 'Guidance: Soul Blueprint Astrology interpretations are shown where they have been completed. Other Moons show “Guidance coming soon” with general reflection questions.' }),
+    h('p', { class: 'muted small', text: `Lunar Timeline: ${fmt(timeline().list[0].date, { month: 'long', year: 'numeric' })} – ${fmt(timeline().list[timeline().list.length - 1].date, { month: 'long', year: 'numeric' })}.` })));
   s.append(h('div', { class: 'spacer-art' }));
   view.append(s);
 }
@@ -1664,7 +1914,7 @@ const Journal = {
     const now = new Date().toISOString();
     const entry = {
       id: uid(), eventId: ev.id, eventType: ev.type, eventDate: ev.dateTime,
-      interpretation: { theme: ev.theme, release: ev.release, invitation: ev.invitation, system: ev.interpretationSystem, isDemo: ev.isDemo },
+      interpretation: { theme: ev.theme, release: ev.release, invitation: ev.invitation, system: ev.generalQuestions && !ev.hasGuidance ? GENERAL_SYSTEM : ev.interpretationSystem, isDemo: ev.isDemo },
       questions: ev.questions.slice(), answers: ev.questions.map(() => ''),
       currentQ: 0, completed: false, createdAt: now, updatedAt: now
     };
@@ -1762,6 +2012,7 @@ function renderJournal(view) {
         h('div', { class: 'e-main' },
           h('div', { class: 'e-title', text: typeLabel(e.eventType) + (skyPositions(e.eventId).moon.verified ? ' in ' + skyPositions(e.eventId).moon.constellation : '') }),
           h('div', { class: 'e-date', text: fmtDate(d) }),
+          h('div', { class: 'e-written', text: 'Written ' + fmt(new Date(e.createdAt), { day: 'numeric', month: 'short', year: 'numeric' }) }),
           !e.completed ? h('div', { class: 'e-state', text: `In progress · ${n} of ${e.questions.length}` }) : null),
         chev()));
     }
@@ -1936,6 +2187,14 @@ function boot() {
   $('#menuBack').addEventListener('click', () => closeMenu());
   $('#menuClose').addEventListener('click', () => closeMenu());
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  // Left/right arrow keys move through the Lunar Timeline (desktop convenience)
+  document.addEventListener('keydown', e => {
+    if (parseRoute().name !== 'moon' || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+    if ($('#modalRoot').children.length || $('#menuScreen').classList.contains('open')) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const b = document.getElementById(e.key === 'ArrowLeft' ? 'tlPrev' : 'tlNext');
+    if (b && !b.disabled) { e.preventDefault(); b.click(); }
+  });
   document.querySelectorAll('#tabbar button').forEach(b => b.addEventListener('click', () => go(b.dataset.route)));
   render();
 }
