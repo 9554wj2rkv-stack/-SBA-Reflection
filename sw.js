@@ -9,7 +9,7 @@
 
    When you release an update, bump CACHE_VERSION.
    ------------------------------------------------------------------ */
-const CACHE_VERSION = 'v1.2.1';
+const CACHE_VERSION = 'v1.4.0';
 const CACHE_NAME = 'moon-reflection-' + CACHE_VERSION;
 
 const PRECACHE = [

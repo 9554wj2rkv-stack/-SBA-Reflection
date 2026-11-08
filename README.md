@@ -47,7 +47,7 @@ sw.js                    Offline support (caches app files only)
 css/styles.css           All styling (design tokens at the top)
 
 js/config.js             ← Settings you may edit (website URL, contact link)
-js/content.js            ← Guidance text and SBA interpretations
+js/content.js            ← Moon readings: meaning + guidance (add SBA readings here)
 js/sky-data.js           True-sky Sun & Moon placements 2020–2045 (generated)
 js/app.js                App logic: screens, journal, autosave, backup
 
@@ -65,8 +65,9 @@ ios/AppIcon.appiconset/         Ready-made Xcode icon set for the iOS app
 |---|---|
 | Connect the SBA website | `js/config.js` → `SBA_WEBSITE_URL: 'https://…'` |
 | Add a contact link | `js/config.js` → `CONTACT_URL: 'mailto:…'` or `'https://…'` |
-| Add official SBA guidance for a Moon | `js/content.js` → `SBA_INTERPRETATIONS`, keyed by event ID, e.g. `'full-moon-2026-10-26'` |
-| Change constellation themes | `js/content.js` → `CONSTELLATION_THEMES` |
+| Add or edit the reading for a Moon (meaning + guidance) | `js/content.js` → `MOON_READINGS`, keyed by event ID, e.g. `'full-moon-2026-11-24'`. Copy the template at the top of the file and use `status: 'sba'`. The event ID is shown under *Astronomical details* on each Moon. |
+| Extend the Lunar Timeline range | `js/config.js` → `TIMELINE_START` / `TIMELINE_END` |
+| Hide demonstration readings (e.g. before App Store release) | `js/config.js` → `SHOW_DEMO_READINGS: false` |
 | Replace artwork with full-resolution originals | `assets/images/` (keep the same file names) |
 
 ---

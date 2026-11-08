@@ -1,124 +1,130 @@
 'use strict';
-/* Moon Reflection — Soul Blueprint Astrology · guidance text (SBA interpretations go here) */
+/* Moon Reflection — Soul Blueprint Astrology · Moon readings — meaning & guidance (add SBA readings here) */
 
-/* Interpretations supplied by Soul Blueprint Astrology, keyed by event ID
-   (e.g. 'full-moon-2026-10-26'). They automatically replace demonstration
-   content for that event. Guidance items may be plain strings or
-   { title, text }. Optional: lessons:{look,go,in} */
+/* =====================================================================
+   2d. MOON READINGS — the meaning and guidance for each Moon
+   ---------------------------------------------------------------------
+   This is the ONLY place to add or edit readings. The astronomy (dates,
+   constellations) is calculated separately and never changes here.
+
+   Each reading is keyed by the Moon's event ID, shown under
+   "Astronomical details" on every Moon, e.g. 'new-moon-2026-11-09'.
+
+   status   'sba'  → an approved Soul Blueprint Astrology interpretation
+            'demo' → a clearly labelled demonstration (never presented as SBA)
+   placements  The constellations the reading was written for. If they do
+            not match the verified true-sky placements of that Moon, the
+            reading is NOT shown (it protects against pasting a reading
+            onto the wrong event).
+
+   TEMPLATE — copy, paste inside MOON_READINGS and fill in:
+
+   'full-moon-2026-11-24': {
+     status: 'sba',
+     placements: { moon: 'Taurus', sun: 'Scorpius' },
+     theme: 'One line that sums up this Moon.',
+     meaning: {
+       phase:    'What this Full Moon represents…',
+       moon:     'Moon in Taurus — emotional and symbolic meaning…',
+       sun:      'Sun in Scorpius — what it symbolises…',
+       together: 'How the two placements interact…',
+       forYou:   'The main life themes to consider…'
+     },
+     lookOut: [{ title: 'Short title.', text: 'One sentence.' }, …],
+     letGo:   [{ title: '…', text: '…' }, …],
+     letIn:   [{ title: '…', text: '…' }, …],
+     lessons: { look: 'Optional closing line for "What to look out for".' },
+     release:    'First-person release statement.',
+     invitation: 'Present-tense, positive affirmation.',
+     questions: ['Question 1?', 'Question 2?', 'Question 3?', 'Question 4?']
+   },
+
+   Use a blank line ("\n\n") inside a text to start a new paragraph.
+   ===================================================================== */
+const MOON_READINGS = {
+
+  /* ---- DEMONSTRATION: New Moon 9 November 2026 · Moon in Libra · Sun in Libra
+     Traditional-astrology symbolism of Libra, the Scales. NOT an SBA reading. */
+  'new-moon-2026-11-09': {
+    status: 'demo',
+    label: 'Traditional astrology demonstration',
+    note: 'This demonstration reading uses the traditional symbolism of Libra, the Scales. It is not an official Soul Blueprint Astrology interpretation. Conventional tropical astrology would place this New Moon in Scorpio.',
+    placements: { moon: 'Libra', sun: 'Libra' },
+    theme: 'A new beginning in balance — choosing a harmony that includes you.',
+    meaning: {
+      phase: 'A New Moon marks the start of the lunar cycle. The Moon passes between the Earth and the Sun with its sunlit side turned away from us, so the night sky goes dark.\n\nIn traditional astrology this quiet darkness symbolises a seed moment: a time to pause, listen inwards and plant an intention you would like to grow over the coming four weeks — before anything is visible.',
+      moon: 'Traditionally, the Moon describes our emotional needs, our instincts and what helps us feel safe. Libra, the Scales, is the only figure of the classical zodiac that is an object rather than a living being — an image of weighing, fairness and equilibrium.\n\nRead symbolically, the Moon here speaks of a need for emotional balance and ease in our closest connections: feeling settled when relationships are fair, and unsettled when the scales tip too far one way. It can also describe a habit of smoothing things over — sensing what others need before naming what we need ourselves.',
+      sun: 'The Sun traditionally represents conscious purpose, vitality and the direction in which we choose to grow. In the Scales, that purpose turns towards relationship, cooperation and considered judgement: weighing different needs and viewpoints before acting, and bringing fairness, courtesy and beauty into the way we live and decide.',
+      together: 'At this New Moon the Sun and Moon stand together in the same constellation, so their symbolism speaks with one voice. What you feel (the Moon) and what you are consciously aiming for (the Sun) both point towards balance.\n\nTraditionally this is read as a clear moment to set an intention about relationships and harmony — with one important nuance: true balance includes you. The Scales ask not only “Is this fair to others?” but also “Is this fair to me?”',
+      forYou: 'This is a gentle invitation to notice where your life feels in or out of balance — between giving and receiving, effort and rest, your own needs and the needs of the people around you.\n\nRather than trying to rebalance everything at once, choose one relationship, agreement or daily rhythm you would like to bring into better balance, and let your intention begin there. A decision you have been weighing for a long time may also deserve attention: a New Moon is a supportive symbolic moment to choose a direction, even before every detail is clear.'
+    },
+    lookOut: [
+      { title: 'People-pleasing.', text: 'Keeping the peace by quietly setting aside what you need.' },
+      { title: 'Endless weighing.', text: 'Delaying a decision while waiting for an option that pleases everyone.' },
+      { title: 'Keeping score.', text: 'Measuring fairness so closely that generosity and trust begin to disappear.' },
+      { title: 'Mirroring others.', text: 'Losing track of your own opinion by adapting to the people around you.' }
+    ],
+    letGo: [
+      { title: 'The need for everyone’s approval.', text: 'Not every choice can satisfy everyone — and it does not have to.' },
+      { title: 'One-sided arrangements.', text: 'Relationships or commitments where your effort is consistently unreturned.' },
+      { title: 'Avoiding necessary conversations.', text: 'Silence that keeps the surface calm while tension grows underneath.' },
+      { title: 'Waiting for perfect certainty.', text: 'The idea that you must know the ideal answer before you can begin.' }
+    ],
+    letIn: [
+      { title: 'Fair agreements.', text: 'Relationships in which both people’s needs are spoken and respected.' },
+      { title: 'Your own voice.', text: 'Saying what you want with kindness and clarity.' },
+      { title: 'Beauty and harmony.', text: 'Small acts that bring calm and grace into your surroundings and your days.' },
+      { title: 'Clear, kind decisions.', text: 'Choosing a direction and allowing it to unfold.' }
+    ],
+    lessons: { look: 'The lesson is to seek balance without disappearing inside it.' },
+    release: 'I release the need to please everyone and the habit of placing myself last. I let go of a balance that only works for others.',
+    invitation: 'I welcome relationships that are fair and kind. I honour my own needs as much as the needs of others, and I begin this cycle in harmony with myself.',
+    questions: [
+      'Where in my life does the balance between giving and receiving feel uneven?',
+      'Which decision have I been weighing for too long, and what would help me choose?',
+      'In which relationship would I like more honesty, fairness or ease?',
+      'What intention for balance would I like to plant during this lunar cycle?'
+    ]
+  }
+
+  /* Add official SBA readings below, e.g.
+  ,'full-moon-2026-11-24': { status: 'sba', placements: { moon: 'Taurus', sun: 'Scorpius' }, … } */
+};
+
+/* Earlier versions used SBA_INTERPRETATIONS; entries placed there are still
+   read and treated as status 'sba'. New readings belong in MOON_READINGS. */
 const SBA_INTERPRETATIONS = {};
 
 /* ---------------------------------------------------------------------
-   DEMONSTRATION constellation themes — symbolic keywords drawn from each
-   constellation's traditional figure and imagery. NOT official SBA
-   teachings; replace with SBA material when supplied. Always labelled.
-   short: a quality · shadow/release/welcome: guidance pieces · q: question
+   PREVIEW content for Moons without a reading. Only general, labelled
+   lunar-phase symbolism and the constellations' traditional names are
+   used — no placement interpretation is invented.
    --------------------------------------------------------------------- */
-const CONSTELLATION_THEMES = {
-  Aries: { figure: 'the Ram', short: 'courage', theme: 'courage, initiative and independence',
-    shadow: ['Impatience.', 'Feeling that everything needs to happen immediately.'], release: ['The need to rush.', 'Not everything has to be resolved today.'], releaseP: 'the need to rush',
-    welcome: ['Steady courage.', 'Taking the first brave step without forcing the rest.'], welcomeP: 'steady courage', q: 'Where am I ready to act with courage instead of waiting for permission?' },
-  Taurus: { figure: 'the Bull', short: 'steadiness', theme: 'steadiness, comfort and what you truly value',
-    shadow: ['Holding on too tightly.', 'Staying with what is familiar even when it no longer serves you.'], release: ['Resistance to change.', 'The belief that security means nothing can move.'], releaseP: 'my resistance to change',
-    welcome: ['Grounded calm.', 'Simple pleasures that genuinely nourish you.'], welcomeP: 'grounded calm', q: 'What do I truly value, and am I making room for it?' },
-  Gemini: { figure: 'the Twins', short: 'curiosity', theme: 'curiosity, conversation and connection',
-    shadow: ['Scattered attention.', 'Saying yes to every idea and finishing none.'], release: ['Mental noise.', 'Thoughts that circle without leading anywhere.'], releaseP: 'mental noise',
-    welcome: ['Honest conversation.', 'Listening as fully as you speak.'], welcomeP: 'honest conversation', q: 'Which conversation have I been avoiding that could bring clarity?' },
-  Cancer: { figure: 'the Crab', short: 'emotional safety', theme: 'home, belonging and emotional safety',
-    shadow: ['Retreating into your shell.', 'Protecting yourself so well that no one can reach you.'], release: ['Old hurts.', 'Memories you keep returning to that only reopen the wound.'], releaseP: 'old hurts',
-    welcome: ['Gentle nurture.', 'Caring for yourself with the tenderness you offer others.'], welcomeP: 'gentle nurture', q: 'Where do I feel truly at home, and what would make me feel safer?' },
-  Leo: { figure: 'the Lion', short: 'self-expression', theme: 'heart, creativity and self-expression',
-    shadow: ['Needing approval.', 'Measuring your worth by how others respond.'], release: ['Hiding your light.', 'Making yourself smaller to keep others comfortable.'], releaseP: 'the habit of hiding my light',
-    welcome: ['Warm-hearted confidence.', 'Sharing what you love without apology.'], welcomeP: 'warm-hearted confidence', q: 'What would I create if I were not afraid of being seen?' },
-  Virgo: { figure: 'the Maiden', short: 'discernment', theme: 'discernment, health and care in the details',
-    shadow: ['Self-criticism.', 'Expecting yourself to be constantly productive.'], release: ['Perfectionism.', 'Your worth is not measured by flawless results.'], releaseP: 'perfectionism',
-    welcome: ['Practical self-care.', 'Small, healthy routines that support you.'], welcomeP: 'practical self-care', q: 'Which small daily habit would most support my wellbeing?' },
-  Libra: { figure: 'the Scales', short: 'balance', theme: 'balance, fairness and relationships',
-    shadow: ['People-pleasing.', 'Keeping the peace at the cost of your own truth.'], release: ['Endless weighing.', 'Waiting for the perfect choice instead of a good one.'], releaseP: 'the need to keep everyone pleased',
-    welcome: ['Honest boundaries.', 'Saying no with kindness so you can say yes to yourself.'], welcomeP: 'honest balance', q: 'Where am I putting other people’s needs ahead of my own?' },
-  Scorpius: { figure: 'the Scorpion', short: 'depth', theme: 'depth, intensity and transformation',
-    shadow: ['Guarding yourself.', 'Testing others before you allow them close.'], release: ['Resentment.', 'Carrying old wounds as protection.'], releaseP: 'resentment I have carried as protection',
-    welcome: ['Honest depth.', 'Letting real feelings rise without fear.'], welcomeP: 'honest depth', q: 'What am I holding onto that is ready to be transformed?' },
-  Ophiuchus: { figure: 'the Serpent-Bearer', short: 'healing', theme: 'healing, wisdom and integration',
-    shadow: ['Trying to fix everyone.', 'Carrying the healing of others while neglecting your own.'], release: ['Old wounds.', 'Pain you no longer need to keep as part of your story.'], releaseP: 'old wounds I no longer need',
-    welcome: ['Integration.', 'Allowing what you have learned to become part of who you are.'], welcomeP: 'healing and integration', q: 'What in my life is asking to be healed rather than fixed?' },
-  Sagittarius: { figure: 'the Archer', short: 'meaning', theme: 'meaning, freedom and the bigger picture',
-    shadow: ['Restlessness.', 'Seeking the next horizon instead of being where you are.'], release: ['Overpromising.', 'Agreeing to more than you can truly give.'], releaseP: 'restlessness',
-    welcome: ['A clear aim.', 'Choosing one direction that gives your life meaning.'], welcomeP: 'a clear sense of meaning', q: 'What gives my life its sense of meaning right now?' },
-  Capricornus: { figure: 'the Sea-Goat', short: 'perseverance', theme: 'ambition, structure and perseverance',
-    shadow: ['Overextending yourself.', 'Trying to prove your strength by doing more instead of recognising when you need rest.'], release: ['Proving yourself.', 'The belief that rest must be earned.'], releaseP: 'the need to keep proving myself',
-    welcome: ['Patient progress.', 'Building steadily towards what matters.'], welcomeP: 'patient, steady progress', q: 'What long-term goal deserves my patient effort?' },
-  Aquarius: { figure: 'the Water-Bearer', short: 'originality', theme: 'vision, community and originality',
-    shadow: ['Emotional distance.', 'Staying in your head to avoid what you feel.'], release: ['Fitting in.', 'Shaping yourself to belong where you do not truly fit.'], releaseP: 'the need to fit in',
-    welcome: ['Your own vision.', 'Ideas that serve both you and the people around you.'], welcomeP: 'my own original vision', q: 'Where am I ready to stand apart and trust my own vision?' },
-  Pisces: { figure: 'the Fishes', short: 'intuition', theme: 'intuition, compassion and imagination',
-    shadow: ['Blurred boundaries.', 'Absorbing other people’s moods as your own.'], release: ['Escaping.', 'Drifting away from what you feel instead of meeting it.'], releaseP: 'the urge to escape',
-    welcome: ['Quiet intuition.', 'Trusting the soft inner knowing beneath the noise.'], welcomeP: 'quiet intuition', q: 'What is my intuition telling me that I have not yet listened to?' },
-  Cetus: { figure: 'the Sea Creature', short: 'emotional depth', theme: 'the deep, the unknown and hidden strength',
-    shadow: ['Fear of the unknown.', 'Avoiding the depths because you cannot see the bottom.'], release: ['Old fears.', 'Stories about danger that belong to the past.'], releaseP: 'old fears',
-    welcome: ['Hidden strength.', 'The resilience you discover when you go deeper.'], welcomeP: 'my hidden strength', q: 'What unknown am I ready to meet with curiosity instead of fear?' },
-  Orion: { figure: 'the Hunter', short: 'purpose', theme: 'purpose, focus and bold pursuit',
-    shadow: ['Chasing too hard.', 'Pursuing goals so intensely that you forget why they matter.'], release: ['Restless striving.', 'The feeling that you are never quite there.'], releaseP: 'restless striving',
-    welcome: ['Focused purpose.', 'Pursuing what truly matters with clear intent.'], welcomeP: 'focused purpose', q: 'What am I truly pursuing, and why does it matter to me?' },
-  Auriga: { figure: 'the Charioteer', short: 'direction', theme: 'guidance, care and steady direction',
-    shadow: ['Pulling every rein.', 'Trying to control every part of the journey.'], release: ['Over-control.', 'The need to steer everything at once.'], releaseP: 'the need to control every rein',
-    welcome: ['Steady direction.', 'Guiding your life with a gentle, confident hand.'], welcomeP: 'steady direction', q: 'Where do I need to hold the reins more gently?' },
-  Sextans: { figure: 'the Sextant', short: 'perspective', theme: 'orientation, measure and finding your bearings',
-    shadow: ['Measuring yourself constantly.', 'Checking your position against everyone else.'], release: ['Comparison.', 'Using other people’s maps to judge your own path.'], releaseP: 'comparison',
-    welcome: ['Your own bearings.', 'Knowing where you stand by your own measure.'], welcomeP: 'my own bearings', q: 'By whose measure am I judging my progress?' }
+const PHASE_MEANINGS = {
+  new: 'A New Moon begins the lunar cycle. The Moon passes between the Earth and the Sun with its lit side turned away from us, and the night sky is dark. Traditionally it symbolises a seed moment — a time for quiet reflection, new intentions and choosing a direction before anything is visible.',
+  full: 'A Full Moon is the peak of the lunar cycle. The Sun and Moon stand on opposite sides of the Earth and the Moon is fully lit. Traditionally it symbolises culmination and illumination — a time to notice what has grown, to evaluate honestly and to release what is no longer needed.'
 };
+const CONSTELLATION_FIGURES = { Aries: 'the Ram', Taurus: 'the Bull', Gemini: 'the Twins', Cancer: 'the Crab', Leo: 'the Lion', Virgo: 'the Maiden',
+  Libra: 'the Scales', Scorpius: 'the Scorpion', Ophiuchus: 'the Serpent-Bearer', Sagittarius: 'the Archer', Capricornus: 'the Sea-Goat',
+  Aquarius: 'the Water-Bearer', Pisces: 'the Fishes', Cetus: 'the Sea Monster', Orion: 'the Hunter', Auriga: 'the Charioteer', Sextans: 'the Sextant' };
 
-/* Generic DEMONSTRATION guidance — used only when a placement is pending
-   or not covered, so no placement-specific wording is shown. */
-const DEMO_INTERPRETATIONS = {
-  full: {
-    theme: 'A time for clarity and releasing what no longer fits.',
-    intro: 'A Full Moon is a symbolic moment of culmination — a time to notice what has come to light and what you no longer need to carry.',
-    lookOut: [
-      { title: 'Impatience.', text: 'Feeling that everything needs to happen immediately.' },
-      { title: 'Overthinking.', text: 'You may feel pulled between analysis and action.' },
-      { title: 'Emotional reactions.', text: 'Speaking or making decisions before understanding what you’re feeling.' }],
-    letGo: [
-      { title: 'The need to rush.', text: 'Not everything has to be resolved today.' },
-      { title: 'Other people’s expectations.', text: 'Choices made to please others rather than to honour yourself.' },
-      { title: 'Old self-doubt.', text: 'Stories about what you are not capable of.' }],
-    letIn: [
-      { title: 'Patience.', text: 'Trust that meaningful things can unfold in their own time.' },
-      { title: 'Rest.', text: 'Recovery as part of strength, not a reward for it.' },
-      { title: 'Self-trust.', text: 'Making one clear decision that reflects who you are becoming.' }],
-    lessons: { look: 'The lesson is to distinguish between genuine ambition and unnecessary pressure.' },
-    release: 'I release the need to force what is meant to unfold in its own time. I set down what was never mine to carry.',
-    invitation: 'I move with patience and trust. I honour my own needs, and I make choices that bring me closer to the life I want.',
-    questions: [
-      'What am I forcing that would benefit from patience?',
-      'Where am I putting other people’s needs ahead of my own?',
-      'What am I ready to stop carrying?',
-      'What one decision would bring me closer to the life I want?'
-    ]
-  },
-  new: {
-    theme: 'A time for quiet beginnings and clear intention.',
-    intro: 'A New Moon is a symbolic pause before something begins — a quiet moment to choose what you would like to nurture next and to plant intentions with care.',
-    lookOut: [
-      { title: 'Over-planning.', text: 'Preparing so thoroughly that nothing actually begins.' },
-      { title: 'Comparison.', text: 'Measuring your starting point against someone else’s progress.' },
-      { title: 'Waiting to feel ready.', text: 'Holding back until you feel completely certain.' }],
-    letGo: [
-      { title: 'The need for certainty.', text: 'You can begin before you know every step.' },
-      { title: 'Old stories.', text: 'Beliefs about what you are capable of that no longer fit.' },
-      { title: 'Pressure.', text: 'The idea that you must have everything figured out.' }],
-    letIn: [
-      { title: 'Curiosity.', text: 'Openness to what could be possible.' },
-      { title: 'One small step.', text: 'Steady progress over dramatic change.' },
-      { title: 'Kindness.', text: 'Gentleness towards yourself as a beginner.' }],
-    lessons: { look: 'The lesson is to begin gently, rather than wait for perfect conditions.' },
-    release: 'I release the need to be certain before I begin. I let go of old stories that keep me small.',
-    invitation: 'I welcome new beginnings with an open heart. I take one clear step towards what matters to me.',
-    questions: [
-      'What would I like to grow during this lunar cycle?',
-      'What small step could I take this week?',
-      'What am I ready to stop carrying into this new cycle?',
-      'How do I want to feel when this cycle closes?'
-    ]
-  }
-};
 const RELEASE_QUESTION_INDEX = 2; // the "ready to stop carrying" question
+
+/* General reflection questions — used when a Moon has no reading yet.
+   They are open prompts, not astrological guidance.
+   (Full Moon questions are the examples from the original Moon Reflection brief.) */
+const GENERAL_SYSTEM = 'General reflection questions — SBA guidance coming soon';
+const GENERAL_QUESTIONS = {
+  full: [
+    'What am I forcing that would benefit from patience?',
+    'Where am I putting other people’s needs ahead of my own?',
+    'What am I ready to stop carrying?',
+    'What one decision would bring me closer to the life I want?'
+  ],
+  new: [
+    'What would I like to grow during this lunar cycle?',
+    'What small step could I take this week?',
+    'What am I ready to stop carrying into this new cycle?',
+    'How do I want to feel when this cycle closes?'
+  ]
+};

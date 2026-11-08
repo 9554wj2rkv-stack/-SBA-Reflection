@@ -396,6 +396,73 @@ details.d-row .d-body p+p{margin-top:.6rem}
 .r-moon .rm-place{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--gold-2)}
 
 /* =========================================================
+   LUNAR TIMELINE (This Moon)
+   ========================================================= */
+.tl{margin:.3rem 0 .2rem}
+.tl-bar{display:flex;align-items:center;gap:8px;padding:6px;border-radius:999px}
+.tl-bar .btn-round{width:48px;height:48px}
+.tl-bar .btn-round[disabled]{opacity:.28}
+.tl-month{flex:1;min-width:0;min-height:48px;display:flex;align-items:center;justify-content:center;gap:.5rem;border:0;background:transparent;color:var(--text);
+  font-family:var(--serif);font-size:1.3rem;border-radius:999px;white-space:nowrap}
+.tl-month .tl-cal{display:grid;place-items:center;color:var(--gold)}
+.tl-month svg{width:19px;height:19px}
+.tl-hints{display:flex;justify-content:space-between;padding:.35rem 1rem 0;font-size:.74rem;letter-spacing:.06em;color:var(--muted);min-height:1.2rem}
+.tl-return{display:flex;margin:.6rem auto 0;min-height:46px;font-size:.92rem;padding:.4rem 1.2rem}
+.tl-return svg{width:18px;height:18px;color:var(--gold)}
+.stage-badges{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin:-.4rem 0 .7rem}
+.badge.muted-badge{border-color:rgba(210,216,226,.35);color:var(--text-2);background:rgba(210,216,226,.06)}
+.moon-stage .time{font-size:.86rem;color:var(--text-2);margin-top:.15rem;letter-spacing:.04em}
+.moon-stage .rel{font-size:.82rem;color:var(--gold-2);margin-top:.25rem;letter-spacing:.04em}
+.slide-l{animation:slideL .38s ease both}
+.slide-r{animation:slideR .38s ease both}
+@keyframes slideL{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+.coming-soon{text-align:center;margin-top:1rem}
+.coming-soon .serif-lead{margin:.75rem 0 .5rem}
+.ev-entries-h{margin:1.2rem 0 .55rem;text-align:center}
+.e-row .e-written{font-size:.76rem;color:var(--muted)}
+.rm-when{font-size:.78rem;color:var(--muted)}
+.gd-moon{font-size:.86rem;color:var(--text-2);margin:-.6rem 0 1.1rem}
+.tl-selects{display:flex;gap:10px;margin-bottom:1rem}
+.sel{flex:1;min-width:0;min-height:52px;border-radius:14px;border:1px solid var(--gold-line);background-color:rgba(6,16,34,.75);color:var(--text);
+  padding:0 2.3rem 0 .95rem;font-size:1rem;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E7B96E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .8rem center;background-size:16px}
+.sel-year{flex:0 0 7.2rem}
+.sel option{background:#0a1a33;color:#F6F1E9}
+.tl-picklist .e-row{margin-bottom:8px}
+.tl-picklist .moon-img{width:48px}
+
+/* =========================================================
+   THE MEANING OF THIS MOON
+   ========================================================= */
+.sec-h{text-align:center;margin:1.7rem 0 .8rem}
+.sec-h h2{text-wrap:balance;font-family:var(--serif);font-weight:500;font-size:1.06rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text);padding-left:.26em;line-height:1.4}
+.sec-h .ornament{margin-top:.45rem}
+.meaning-card{border-radius:22px;padding:1.2rem 1.15rem .4rem}
+.reading-top{text-align:center;padding-bottom:1rem;border-bottom:1px solid rgba(231,185,110,.22)}
+.reading-theme{font-family:var(--serif);font-size:1.42rem;line-height:1.3;color:var(--text);margin-top:.75rem}
+.reading-note{font-size:.84rem;line-height:1.55;color:var(--muted);margin-top:.6rem}
+.mblock{padding:1.05rem 0;border-top:1px solid rgba(231,185,110,.14)}
+.reading-top+.mblock{border-top:0}
+.mblock h3{display:flex;align-items:center;gap:.7rem;font-family:var(--serif);font-weight:500;font-size:1.36rem;line-height:1.2;color:var(--text);margin-bottom:.55rem}
+.mb-ic{width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--gold-line);display:grid;place-items:center;color:var(--gold)}
+.mb-ic svg{width:18px;height:18px}
+.mb-kicker{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:-.15rem 0 .5rem}
+.mb-body p{font-size:1rem;line-height:1.7;color:#E4E8EF}
+.mb-body p+p{margin-top:.65rem}
+.muted-block .mb-body p{color:var(--text-2)}
+.badge.ok{border-color:rgba(168,230,190,.55)}
+.q-card{margin-top:12px}
+.q-list{margin:.55rem 0 .3rem;padding-left:1.4rem}
+.q-list li{font-family:var(--serif);font-size:1.18rem;line-height:1.4;color:var(--text);margin:.4rem 0;padding-left:.2rem}
+.q-list li::marker{color:var(--gold);font-family:var(--sans);font-size:.9rem}
+.sd-id code{font-size:.82rem;color:var(--gold-2);overflow-wrap:anywhere}
+.entry-meaning{margin:12px 0}
+.entry-meaning .em-body{padding:0 .6rem .8rem}
+.entry-meaning .meaning-card{background:none;border:0;padding:.2rem .4rem;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* =========================================================
    Tab bar
    ========================================================= */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);max-width:none;
