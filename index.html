@@ -479,6 +479,49 @@ details.d-row .d-body p+p{margin-top:.6rem}
 .entry-meaning .meaning-card{background:none;border:0;padding:.2rem .4rem;-webkit-backdrop-filter:none;backdrop-filter:none}
 
 /* =========================================================
+   MOON-GUIDED REFLECTION
+   ========================================================= */
+.rg{border-radius:18px;padding:.7rem .85rem .75rem;margin:.1rem 0 .9rem;transition:opacity .22s ease}
+.rg-head{display:flex;align-items:center;gap:.7rem}
+.rg-head .moon-img{width:38px}
+.rg-id{flex:1;min-width:0}
+.rg-phase{font-family:var(--serif);font-size:1.12rem;line-height:1.2;color:var(--text)}
+.rg-chips{display:flex;flex-wrap:wrap;gap:.1rem .7rem;margin-top:.1rem}
+.rg-chip{display:inline-flex;align-items:center;gap:.28rem;font-size:.8rem;color:var(--gold-2);white-space:nowrap}
+.rg-chip svg{width:13px;height:13px;color:var(--gold)}
+.rg-chip.pending{color:var(--muted)}
+.rg-toggle{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--gold-soft);background:transparent;color:var(--gold);display:grid;place-items:center;padding:0}
+.rg-toggle svg{width:18px;height:18px;transform:rotate(-90deg);transition:transform .2s}
+.rg.compact .rg-toggle svg{transform:rotate(90deg)}
+body.kb-open .rg:not(.force-open) .rg-toggle svg{transform:rotate(90deg)}
+.rg-focus{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:.6rem 0 0;line-height:1.5}
+.rg.compact .rg-focus,body.kb-open .rg:not(.force-open) .rg-focus{cursor:pointer}
+.rg-theme{font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.3;color:var(--gold-2);margin:.35rem 0 .3rem}
+.rg-text{font-size:.94rem;line-height:1.55;color:#E4E8EF}
+.rg-src{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .7rem;margin:.5rem 0 0}
+.rg .rg-src .badge{border:0;background:none;padding:0;font-size:.62rem;letter-spacing:.14em;white-space:normal;text-align:left;line-height:1.4;color:var(--muted)}
+.rg .rg-src .badge.demo{color:#CFC3F5}
+.rg .rg-src .badge.ok{color:var(--ok)}
+.rg .rg-src .rm-when{font-size:.74rem;color:var(--muted)}
+.rg.compact .rg-more,body.kb-open .rg:not(.force-open) .rg-more{display:none}
+body.kb-open .rg:not(.force-open){padding:.5rem .75rem .55rem;margin-bottom:.6rem}
+body.kb-open .rg:not(.force-open) .rg-head .moon-img{width:30px}
+body.kb-open .rg:not(.force-open) .rg-focus{margin-top:.35rem}
+.rg~.q-text{font-size:1.75rem;margin-top:0}
+.rg-help{margin-top:.45rem;border-top:1px solid rgba(231,185,110,.16)}
+.rg-help summary{list-style:none;display:flex;align-items:center;gap:.6rem;min-height:46px;cursor:pointer;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text)}
+.rg-help summary::-webkit-details-marker{display:none}
+.rg-help summary .chev{margin-left:auto;transition:transform .2s}
+.rg-help[open] summary .chev{transform:rotate(90deg)}
+.rg-help-ic{color:var(--gold);display:grid;place-items:center}
+.rg-help-ic svg{width:20px;height:20px}
+.rg-starters{list-style:none;margin:.1rem 0 .4rem;padding:0}
+.rg-starters li{position:relative;padding:.45rem 0 .45rem 1.3rem;font-family:var(--serif);font-size:1.12rem;line-height:1.4;color:var(--text)}
+.rg-starters li::before{content:"";position:absolute;left:.15rem;top:.95rem;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(231,185,110,.6)}
+.rg-note{font-size:.76rem;color:var(--muted);margin-bottom:.2rem}
+.q-focus{display:block;font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.1rem}
+
+/* =========================================================
    Tab bar
    ========================================================= */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);max-width:none;
@@ -544,7 +587,7 @@ html[data-motion="reduce"] *{animation:none!important;transition:none!important}
 <script>
 'use strict';
 /* =====================================================================
-   MOON REFLECTION — Soul Blueprint Astrology · Version 1.4
+   MOON REFLECTION — Soul Blueprint Astrology · Version 1.5
    Single-file vanilla JS app. No build step, no external services.
    Journal data is stored ONLY in this browser's localStorage.
    ===================================================================== */
@@ -554,7 +597,7 @@ html[data-motion="reduce"] *{animation:none!important;transition:none!important}
    ===================================================================== */
 const CONFIG = {
   APP_NAME: 'Moon Reflection',
-  VERSION: '1.4.0',
+  VERSION: '1.5.0',
 
   /* ------------------------------------------------------------------
      SBA WEBSITE URL — the ONE place to configure the future website.
@@ -840,8 +883,23 @@ function placementLine(sky) {
      lessons: { look: 'Optional closing line for "What to look out for".' },
      release:    'First-person release statement.',
      invitation: 'Present-tense, positive affirmation.',
-     questions: ['Question 1?', 'Question 2?', 'Question 3?', 'Question 4?']
+     questions: ['Question 1?', 'Question 2?', 'Question 3?', 'Question 4?'],
+
+     // Moon-guided reflection: one item per question (matched by its exact text).
+     // Shown above the question while the user writes. Three short prompts each.
+     reflection: [
+       { question: 'Question 1?', focus: 'Awareness & recognition',
+         guidance: 'Two or three sentences linking this Moon to the question.',
+         starters: ['Prompt 1?', 'Prompt 2?', 'Prompt 3?'] },
+       …one for each question
+     ]
    },
+
+   Suggested focus for the four questions —
+   New Moon:  growth & new beginnings · intentions & practical steps ·
+              what to release before starting · how you want to feel
+   Full Moon: awareness & recognition · what has reached completion ·
+              patterns or burdens to release · what to carry forward
 
    Use a blank line ("\n\n") inside a text to start a new paragraph.
    ===================================================================== */
@@ -884,10 +942,47 @@ const MOON_READINGS = {
     release: 'I release the need to please everyone and the habit of placing myself last. I let go of a balance that only works for others.',
     invitation: 'I welcome relationships that are fair and kind. I honour my own needs as much as the needs of others, and I begin this cycle in harmony with myself.',
     questions: [
-      'Where in my life does the balance between giving and receiving feel uneven?',
-      'Which decision have I been weighing for too long, and what would help me choose?',
-      'In which relationship would I like more honesty, fairness or ease?',
-      'What intention for balance would I like to plant during this lunar cycle?'
+      'What would I like to grow in my relationships, and in my own sense of balance, during this cycle?',
+      'What intention for balance will I set, and what is one practical step I can take this week?',
+      'What imbalance — or habit of placing myself last — am I ready to release before this cycle begins?',
+      'How do I want to feel in my relationships, and within myself, as this cycle unfolds?'
+    ],
+    reflection: [
+      { question: 'What would I like to grow in my relationships, and in my own sense of balance, during this cycle?',
+        focus: 'Growth & new beginnings',
+        guidance: 'With the Moon and Sun together in the Scales, this New Moon traditionally turns beginnings towards relationship and balance. Consider what you would like to grow between you and others — and between the different parts of your own life.',
+        starters: ['Which relationship would you love to feel easier or more mutual a month from now?', 'Where in your daily life would a little more balance make the biggest difference?', 'What new beginning would feel fair to both you and the people around you?'] },
+      { question: 'What intention for balance will I set, and what is one practical step I can take this week?',
+        focus: 'Intentions & practical steps',
+        guidance: 'The Scales symbolise weighing and choosing. An intention for balance becomes real when it turns into one clear, kind decision you can act on in the days ahead.',
+        starters: ['Which decision have you been weighing that one small step could move forward?', 'What would one fair agreement — with yourself or someone else — look like this week?', 'What could you schedule, say or simplify in the next few days?'] },
+      { question: 'What imbalance — or habit of placing myself last — am I ready to release before this cycle begins?',
+        focus: 'What to release before beginning',
+        guidance: 'Traditionally, the shadow of the Scales is keeping the peace at your own expense. Before planting something new, notice where giving has quietly become one-sided.',
+        starters: ['Where do you say yes to keep things smooth, even when it costs you?', 'Which arrangement feels uneven, and which part of it is yours to change?', 'Which conversation have you been avoiding for the sake of harmony?'] },
+      { question: 'How do I want to feel in my relationships, and within myself, as this cycle unfolds?',
+        focus: 'How you want to feel',
+        guidance: 'This Moon’s invitation is a harmony that includes you. Imagine the feeling of balance as the cycle grows — not perfect, but fair, kind and at ease.',
+        starters: ['What does “at ease” feel like in your body?', 'Which three words describe the relationships you want to nurture?', 'By the next Full Moon, how would you know you had honoured your own needs?'] },
+
+      /* Questions used by this reading before 10 Nov 2026 — kept so earlier
+         reflections still receive matching guidance when reopened. */
+      { question: 'Where in my life does the balance between giving and receiving feel uneven?',
+        focus: 'Awareness of balance',
+        guidance: 'The Scales ask you to notice rather than judge. With the Sun and Moon together in Libra, this New Moon traditionally highlights the give-and-take in your relationships and routines.',
+        starters: ['Where do you tend to give more than you receive — and where is it the other way round?', 'Which exchange leaves you tired rather than nourished?', 'What would a fairer balance look like in one specific situation?'] },
+      { question: 'Which decision have I been weighing for too long, and what would help me choose?',
+        focus: 'Intentions & practical steps',
+        guidance: 'The Scales symbolise considered judgement — and also the risk of weighing for ever. A New Moon is traditionally a supportive moment to choose a direction.',
+        starters: ['What are you waiting to feel certain about?', 'If you had to decide today, which way would you lean?', 'Which small conversation or piece of information would make choosing easier?'] },
+      { question: 'In which relationship would I like more honesty, fairness or ease?',
+        focus: 'Growth in relationships',
+        guidance: 'This Moon’s symbolism centres on relationship. Consider where a new beginning could make a connection feel more honest and mutual.',
+        starters: ['What do you wish you could say more freely to someone close to you?', 'Where do you hold back to keep the peace?', 'What would “ease” look like in this relationship?'] },
+      { question: 'What intention for balance would I like to plant during this lunar cycle?',
+        focus: 'Intention',
+        guidance: 'With the Sun and Moon united in the Scales, an intention for balance traditionally has a clear voice this cycle — especially one that includes your own needs.',
+        starters: ['What would balance look like in one ordinary day?', 'Which need of your own would this intention honour?', 'How could you phrase it so it feels kind rather than strict?'] }
     ]
   }
 
@@ -915,15 +1010,16 @@ const CONSTELLATION_FIGURES = { Aries: 'the Ram', Taurus: 'the Bull', Gemini: 't
 const RELEASE_QUESTION_INDEX = 2; // the "ready to stop carrying" question
 
 /* General reflection questions — used when a Moon has no reading yet.
-   They are open prompts, not astrological guidance.
-   (Full Moon questions are the examples from the original Moon Reflection brief.) */
+   They are open prompts, not astrological guidance. They follow the
+   four-part structure: New Moon — growth, intention, release, feeling;
+   Full Moon — awareness, completion, release, carrying forward. */
 const GENERAL_SYSTEM = 'General reflection questions — SBA guidance coming soon';
 const GENERAL_QUESTIONS = {
   full: [
-    'What am I forcing that would benefit from patience?',
-    'Where am I putting other people’s needs ahead of my own?',
-    'What am I ready to stop carrying?',
-    'What one decision would bring me closer to the life I want?'
+    'What has this lunar cycle helped me see more clearly?',
+    'What has reached completion in my life, or is ready to be completed?',
+    'Which pattern or burden am I ready to release?',
+    'What do I want to carry forward into the next cycle?'
   ],
   new: [
     'What would I like to grow during this lunar cycle?',
@@ -932,6 +1028,58 @@ const GENERAL_QUESTIONS = {
     'How do I want to feel when this cycle closes?'
   ]
 };
+
+/* General reflection SUPPORT — shown above general questions while writing.
+   Clearly labelled as general; never presented as SBA guidance.
+   Matched by exact question text (earlier general questions included). */
+const GENERAL_REFLECTION = [
+  // New Moon
+  { question: 'What would I like to grow during this lunar cycle?', focus: 'Growth & new beginnings',
+    guidance: 'A New Moon is traditionally a time of beginnings. Let this question point you towards something you would genuinely like to see grow — not what you feel you should want.',
+    starters: ['What has been quietly asking for more of your time or attention?', 'If this cycle went well, what would be a little different four weeks from now?', 'Which part of your life feels ready for a fresh start?'] },
+  { question: 'What small step could I take this week?', focus: 'Intentions & practical steps',
+    guidance: 'An intention becomes real through small, concrete actions. Think in days rather than months.',
+    starters: ['What is the smallest step that would still feel meaningful?', 'When this week could you realistically take it?', 'What might get in the way, and how could you make it easier?'] },
+  { question: 'What am I ready to stop carrying into this new cycle?', focus: 'What to release before beginning',
+    guidance: 'Beginning well often means putting something down first — a habit, a worry or an expectation that takes up room you need.',
+    starters: ['What do you keep carrying out of habit rather than choice?', 'What would you stop doing if no one were watching?', 'Which worry has had more of your energy than it deserves?'] },
+  { question: 'How do I want to feel when this cycle closes?', focus: 'How you want to feel',
+    guidance: 'Intentions are easier to keep when you know the feeling you are moving towards.',
+    starters: ['Which three words describe how you would like to feel by the next Full Moon?', 'When did you last feel that way, and what was happening?', 'What could remind you of this feeling on a difficult day?'] },
+  // Full Moon
+  { question: 'What has this lunar cycle helped me see more clearly?', focus: 'Awareness & recognition',
+    guidance: 'A Full Moon is traditionally a moment of illumination — a time to notice what has become clearer, about yourself or your situation.',
+    starters: ['What has surprised you about yourself recently?', 'Which situation looks different now than it did a month ago?', 'What have you been noticing but not yet put into words?'] },
+  { question: 'What has reached completion in my life, or is ready to be completed?', focus: 'What has reached completion',
+    guidance: 'Culmination is a time to recognise what has finished — a project, a phase, a conversation or a way of thinking.',
+    starters: ['What have you achieved or lived through since the last New Moon?', 'What feels finished, even if no one has officially ended it?', 'What deserves acknowledgement before you move on?'] },
+  { question: 'Which pattern or burden am I ready to release?', focus: 'Patterns & burdens to release',
+    guidance: 'Release often begins with simply naming what weighs on you, without needing to solve it at once.',
+    starters: ['Which reaction keeps repeating, even though it no longer helps you?', 'What responsibility have you taken on that isn’t truly yours?', 'What would feel lighter if you let it go?'] },
+  { question: 'What do I want to carry forward into the next cycle?', focus: 'What to carry forward',
+    guidance: 'Not everything needs to be released. Some insights, habits and relationships are worth bringing with you.',
+    starters: ['What has supported you well during this cycle?', 'Which insight from this month do you want to remember?', 'What would you like to give more space to next?'] },
+  // Earlier general Full Moon questions (from the original brief) — for existing reflections
+  { question: 'What am I forcing that would benefit from patience?', focus: 'Awareness & recognition',
+    guidance: 'Notice where effort has turned into pressure. Awareness comes before change.',
+    starters: ['Where do you feel impatient or tense right now?', 'What would happen if you gave this one more week?', 'What are you afraid will happen if you stop pushing?'] },
+  { question: 'Where am I putting other people’s needs ahead of my own?', focus: 'Recognition',
+    guidance: 'Recognising an imbalance is the first step to restoring it — gently, and without blame.',
+    starters: ['When did you last say yes while meaning no?', 'Whose needs come first by default, and why?', 'Which need of your own have you been postponing?'] },
+  { question: 'What am I ready to stop carrying?', focus: 'Patterns & burdens to release',
+    guidance: 'Release often begins with simply naming what weighs on you, without needing to solve it at once.',
+    starters: ['Which reaction keeps repeating, even though it no longer helps you?', 'What responsibility have you taken on that isn’t truly yours?', 'What would feel lighter if you let it go?'] },
+  { question: 'What one decision would bring me closer to the life I want?', focus: 'What to carry forward',
+    guidance: 'Let the clarity of the Full Moon point you towards one choice rather than a long list.',
+    starters: ['Which decision have you been postponing?', 'Which choice would your future self thank you for?', 'What would make this decision feel smaller and more doable?'] }
+];
+/* Used only when a question has no matching support at all (e.g. a question
+   from a much earlier version). General writing prompts, labelled as such. */
+const GENERAL_STARTERS = {
+  new: ['What feels most alive in this question for you right now?', 'What would you write if no one else would ever read it?', 'Which small, honest observation could you start with?'],
+  full: ['What do you notice first when you read this question?', 'What would you write if no one else would ever read it?', 'Which small, honest observation could you start with?']
+};
+const GENERAL_THEMES = { new: 'Beginnings and intention', full: 'Awareness and release' };
 
 /* =====================================================================
    2e. READING ENGINE — joins a reading to the calculated astronomy
@@ -966,8 +1114,45 @@ function readingFor(eventId, sky) {
     lessons: r.lessons && typeof r.lessons === 'object' ? Object.assign({}, r.lessons) : {},
     release: txt(r.release),
     invitation: txt(r.invitation),
-    questions: Array.isArray(r.questions) ? r.questions.filter(q => typeof q === 'string' && q.trim()) : []
+    questions: Array.isArray(r.questions) ? r.questions.filter(q => typeof q === 'string' && q.trim()) : [],
+    reflection: Array.isArray(r.reflection) ? r.reflection.map(normSupport).filter(Boolean) : []
   };
+}
+function normSupport(x) {
+  if (!x || typeof x !== 'object' || typeof x.question !== 'string') return null;
+  return { question: x.question.trim(), focus: txt(x.focus), guidance: txt(x.guidance),
+    starters: Array.isArray(x.starters) ? x.starters.filter(t => typeof t === 'string' && t.trim()).slice(0, 3) : [] };
+}
+const qKey = q => String(q || '').trim().toLowerCase().replace(/[‘’]/g, "'").replace(/\s+/g, ' ');
+const GENERAL_SUPPORT_INDEX = (() => { const m = {}; GENERAL_REFLECTION.forEach(x => { const n = normSupport(x); if (n) m[qKey(n.question)] = n; }); return m; })();
+
+/* Moon-guided reflection: the guidance shown above ONE question.
+   Order: the event's own reading (SBA or labelled demo) → general support
+   (labelled general) → Moon-level fallback. Never presents general text as SBA. */
+function questionSupport(ev, question) {
+  const k = qKey(question);
+  const rd = ev.reading;
+  if (rd) {
+    const hit = rd.reflection.find(x => qKey(x.question) === k);
+    if (hit) return Object.assign({ source: rd.status, label: rd.label }, hit);
+  }
+  const g = GENERAL_SUPPORT_INDEX[k];
+  if (g) return Object.assign({ source: 'general', label: 'General reflection support' }, g);
+  if (rd) {
+    const first = paras(rd.meaning.forYou)[0];
+    return { source: rd.status, label: rd.label, focus: '', moonLevel: true,
+      guidance: (first && first.textContent) || rd.invitation || '', starters: GENERAL_STARTERS[ev.type] || GENERAL_STARTERS.new, generalStarters: true };
+  }
+  return { source: 'general', label: 'General reflection support', focus: '', moonLevel: true,
+    guidance: ev.type === 'full' ? 'A Full Moon traditionally invites awareness: noticing what has grown, what has finished and what you are ready to release.' : 'A New Moon traditionally invites beginnings: choosing what you would like to grow and taking a first gentle step.',
+    starters: GENERAL_STARTERS[ev.type] || GENERAL_STARTERS.new, generalStarters: true };
+}
+/* The lunar event an entry belongs to — always its own event ID, never the latest Moon. */
+function eventForEntry(entry) {
+  const raw = timelineEvent(entry.eventId);
+  if (raw) return buildLunarEvent(raw);
+  const d = new Date(entry.eventDate);
+  return buildLunarEvent({ id: entry.eventId, type: entry.eventType === 'new' ? 'new' : 'full', iso: entry.eventDate, date: d });
 }
 
 function buildLunarEvent(a) {
@@ -1480,7 +1665,7 @@ function questionsCard(e) {
   const general = e.generalQuestions;
   return h('div', { class: 'glass card q-card' },
     h('div', { class: 'lesson-kind', text: general ? 'Four general reflection questions' : 'Four guided journal questions' }),
-    h('ol', { class: 'q-list' }, e.questions.map(q => h('li', { text: q }))),
+    h('ol', { class: 'q-list' }, e.questions.map(q => { const sp = questionSupport(e, q); return h('li', null, sp.focus ? h('span', { class: 'q-focus', text: sp.focus }) : null, h('span', { text: q })); })),
     general ? h('p', { class: 'tiny', text: 'General prompts until the SBA questions for this Moon are added.' }) : null);
 }
 
@@ -1647,18 +1832,17 @@ function renderReflect(view, args) {
   const prevBtn = h('button', { class: 'btn-round', 'aria-label': 'Previous question', html: ICONS.arrowL, onclick: () => moveTo(qi - 1) });
   const nextBtn = h('button', { class: 'btn-gold', onclick: () => (qi < total - 1 ? moveTo(qi + 1) : finish()) });
 
+  // Moon guidance card — always for THIS entry's own lunar event
+  const ev = eventForEntry(entry);
+  const guide = guidanceCard(ev, entry);
+
   const shell = h('div', { class: 'reflect-shell' },
     header('Your Reflection', { back: saveAndClose, backLabel: 'Save and close' }),
     h('div', { class: 'reflect-body' },
-      h('div', { class: 'r-moon' }, moonImg(entry.eventType),
-        h('div', null, h('div', { class: 'rm-kind', text: typeLabel(entry.eventType) }), h('div', { class: 'rm-date', text: fmtDate(new Date(entry.eventDate)) }),
-          h('div', { class: 'rm-place', text: placementLine(skyPositions(entry.eventId)) }),
-          h('div', { class: 'rm-when', text: relationToMoon(new Date(entry.createdAt), new Date(entry.eventDate), 'Started') }))),
       h('div', { class: 'r-progress', role: 'presentation' }, bar),
       h('div', { class: 'r-count' }, countN, dots),
+      guide.el,
       qText,
-      entry.interpretation && entry.interpretation.isDemo ? h('p', { class: 'tiny', style: 'margin:-.6rem 0 .6rem', text: 'Demonstration question' })
-        : (entry.interpretation && /^General/.test(entry.interpretation.system || '') ? h('p', { class: 'tiny', style: 'margin:-.6rem 0 .6rem', text: 'General reflection question · SBA guidance coming soon' }) : null),
       wrap,
       h('div', { class: 'hint glass' }, ci('bulb', true), h('p', { text: 'Allow yourself to be honest. There are no right or wrong answers. This is your personal space.' }))),
     h('div', { class: 'reflect-foot' }, prevBtn, nextBtn));
@@ -1670,6 +1854,7 @@ function renderReflect(view, args) {
       countN.setAttribute('aria-label', `Question ${qi + 1} of ${total}`);
       bar.style.width = ((qi + 1) / total * 100) + '%';
       qText.textContent = entry.questions[qi];
+      guide.show(qi, entry.questions[qi], total);
       ta.value = entry.answers[qi] || '';
       dots.innerHTML = '';
       entry.questions.forEach((_, i) => {
@@ -1682,9 +1867,9 @@ function renderReflect(view, args) {
       nextBtn.innerHTML = `<span>${qi === total - 1 ? 'Finish' : 'Next'}</span>` + ICONS.arrowR;
       nextBtn.setAttribute('aria-label', qi === total - 1 ? 'Finish reflection' : ((ta.value || '').trim() ? 'Next question' : 'Skip to next question'));
       updateWords();
-      qText.classList.remove('swap-out'); wrap.classList.remove('swap-out');
+      qText.classList.remove('swap-out'); wrap.classList.remove('swap-out'); guide.el.classList.remove('swap-out');
     };
-    if (animate && !motionReduced()) { qText.classList.add('swap-out'); wrap.classList.add('swap-out'); setTimeout(apply, 200); }
+    if (animate && !motionReduced()) { qText.classList.add('swap-out'); wrap.classList.add('swap-out'); guide.el.classList.add('swap-out'); setTimeout(apply, 200); }
     else apply();
   }
   function updateWords() { const n = wordCount(ta.value); words.textContent = n === 1 ? '1 word' : n + ' words'; }
@@ -1698,7 +1883,15 @@ function renderReflect(view, args) {
     paint(true);
     shell.querySelector('.reflect-body').scrollTop = 0;
   }
-  function finish() {
+  async function finish() {
+    flushSave();
+    const answered = Journal.answeredCount(entry);
+    if (answered < total) {
+      const v = await showModal({ title: 'Finish this reflection?',
+        body: [`You have answered ${answered} of ${total} questions.`, 'Unanswered questions stay empty, and you can come back to add to them at any time.'],
+        actions: [{ label: 'Finish reflection', value: 'finish', style: 'primary' }, { label: 'Keep writing', value: null }] });
+      if (v !== 'finish') return;
+    }
     entry.completed = true;
     entry.currentQ = 0;
     entry.updatedAt = new Date().toISOString();
@@ -1731,6 +1924,63 @@ function renderReflect(view, args) {
 }
 function teardownReflect() { reflectState = null; autosave.entryId = null; }
 
+/* Moon guidance card — a gentle companion above each reflection question.
+   Expanded or compact (remembered in Settings); compacts itself while the
+   keyboard is open so it never covers the writing area. Not sticky. */
+let helpOpen = false;
+function guidanceCard(ev, entry) {
+  const chip = (icon, label, b) => h('span', { class: 'rg-chip' + (b.verified ? '' : ' pending'), html: icon },
+    h('span', { text: b.verified ? `${label} ${b.constellation}` : `${label} · pending` }));
+  const toggle = h('button', { class: 'rg-toggle', 'aria-label': 'Show or hide Moon guidance', html: ICONS.chev });
+  const focus = h('div', { class: 'rg-focus' });
+  const theme = h('p', { class: 'rg-theme' });
+  const text = h('p', { class: 'rg-text' });
+  const badge = h('span', { class: 'badge' });
+  const startersList = h('ul', { class: 'rg-starters' });
+  const startersNote = h('p', { class: 'rg-note' });
+  const help = h('details', { class: 'rg-help' },
+    h('summary', null, h('span', { class: 'rg-help-ic', html: ICONS.bulb }), h('span', { text: 'Help me reflect' }), chev()),
+    startersList, startersNote);
+  help.addEventListener('toggle', () => { helpOpen = help.open; });
+  const more = h('div', { class: 'rg-more', id: 'rgMore' }, theme, text,
+    h('div', { class: 'rg-src' }, badge, h('span', { class: 'rm-when', text: relationToMoon(new Date(entry.createdAt), ev.date, 'Started') })), help);
+  const el = h('section', { class: 'rg glass strong', 'aria-label': 'Moon guidance for this question' },
+    h('div', { class: 'rg-head' }, moonImg(ev.type),
+      h('div', { class: 'rg-id' },
+        h('div', { class: 'rg-phase', text: `${typeLabel(ev.type)} · ${fmt(ev.date, { day: 'numeric', month: 'short', year: 'numeric' })}` }),
+        h('div', { class: 'rg-chips' }, chip(ICONS.crescentFill, 'Moon in', ev.sky.moon), chip(SUN_ICON, 'Sun in', ev.sky.sun))),
+      toggle),
+    focus, more);
+  toggle.setAttribute('aria-controls', 'rgMore');
+  const setExpanded = (on, remember) => {
+    el.classList.toggle('compact', !on);
+    el.classList.toggle('force-open', !!on && document.body.classList.contains('kb-open'));
+    toggle.setAttribute('aria-expanded', String(!!on));
+    if (remember) { settings.guidanceExpanded = !!on; saveSettings(); }
+  };
+  toggle.addEventListener('click', () => {
+    const open = document.body.classList.contains('kb-open') ? !el.classList.contains('force-open') : el.classList.contains('compact');
+    setExpanded(open, !document.body.classList.contains('kb-open'));
+  });
+  focus.addEventListener('click', () => { if (el.classList.contains('compact') || (document.body.classList.contains('kb-open') && !el.classList.contains('force-open'))) toggle.click(); });
+  setExpanded(settings.guidanceExpanded !== false, false);
+
+  function show(i, question, total) {
+    const sp = questionSupport(ev, question);
+    focus.textContent = `Question ${i + 1} of ${total}` + (sp.focus ? ' · ' + sp.focus : ' · This Moon');
+    const rd = ev.reading;
+    theme.textContent = rd && rd.theme ? rd.theme : GENERAL_THEMES[ev.type] || '';
+    text.textContent = sp.guidance || '';
+    badge.textContent = sp.source === 'general' ? 'General reflection support · not SBA guidance' : sp.label;
+    badge.className = 'badge' + (sp.source === 'demo' ? ' demo' : sp.source === 'sba' ? ' ok' : ' muted-badge');
+    startersList.innerHTML = '';
+    sp.starters.forEach(t => startersList.append(h('li', { text: t })));
+    startersNote.textContent = (sp.generalStarters ? 'General prompts. ' : '') + 'Thought starters, not answers — follow whatever feels true for you.';
+    help.open = helpOpen;
+  }
+  return { el, show };
+}
+
 /* Keep the writing area and controls above the iPhone keyboard. */
 let vvBound = false;
 function setupViewport() {
@@ -1741,6 +1991,7 @@ function setupViewport() {
     document.documentElement.style.setProperty('--vv-h', hgt + 'px');
     document.documentElement.style.setProperty('--vv-top', top + 'px');
     document.body.classList.toggle('kb-open', !!vv && window.innerHeight - vv.height > 140);
+    if (!document.body.classList.contains('kb-open')) document.querySelectorAll('.rg.force-open').forEach(x => x.classList.remove('force-open'));
   };
   update();
   if (!vvBound) {
@@ -2182,7 +2433,7 @@ async function deleteAllData() {
 /* =====================================================================
    9. SETTINGS
    ===================================================================== */
-let settings = { textSize: 'large', motion: 'system', revisitPrompts: true };
+let settings = { textSize: 'large', motion: 'system', revisitPrompts: true, guidanceExpanded: true };
 function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(STORAGE_KEYS.settings) || 'null'); if (s && typeof s === 'object') settings = Object.assign(settings, s); } catch (e) {}
   applySettings();
@@ -2208,7 +2459,9 @@ function renderSettings(view) {
     h('p', { class: 'small muted', style: 'margin-bottom:.6rem', text: 'Text size' }),
     seg([['standard', 'Standard'], ['large', 'Large'], ['xl', 'Extra large']], settings.textSize, v => { settings.textSize = v; applySettings(); saveSettings(); }, 'Text size'),
     h('p', { class: 'small muted', style: 'margin:1rem 0 .6rem', text: 'Motion' }),
-    seg([['system', 'Follow device'], ['reduce', 'Always reduce']], settings.motion, v => { settings.motion = v; applySettings(); saveSettings(); }, 'Motion')));
+    seg([['system', 'Follow device'], ['reduce', 'Always reduce']], settings.motion, v => { settings.motion = v; applySettings(); saveSettings(); }, 'Motion'),
+    h('p', { class: 'small muted', style: 'margin:1rem 0 .6rem', text: 'Moon guidance while reflecting' }),
+    seg([[true, 'Expanded'], [false, 'Compact']], settings.guidanceExpanded !== false, v => { settings.guidanceExpanded = v; saveSettings(); }, 'Moon guidance while reflecting')));
   const sw = h('input', { type: 'checkbox', id: 'revisitSw', role: 'switch' });
   sw.checked = !!settings.revisitPrompts;
   sw.addEventListener('change', () => { settings.revisitPrompts = sw.checked; saveSettings(); toast(sw.checked ? 'Revisit invitations on.' : 'Revisit invitations off.'); });
