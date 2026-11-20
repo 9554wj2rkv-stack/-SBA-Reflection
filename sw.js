@@ -9,7 +9,7 @@
 
    When you release an update, bump CACHE_VERSION.
    ------------------------------------------------------------------ */
-const CACHE_VERSION = 'v1.4.0';
+const CACHE_VERSION = 'v1.6.0';
 const CACHE_NAME = 'moon-reflection-' + CACHE_VERSION;
 
 const PRECACHE = [
@@ -19,6 +19,7 @@ const PRECACHE = [
   './css/styles.css',
   './js/config.js',
   './js/sky-data.js',
+  './js/library.js',
   './js/content.js',
   './js/app.js',
   './assets/images/hero.webp',

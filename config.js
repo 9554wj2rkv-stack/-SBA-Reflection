@@ -6,7 +6,7 @@
    ===================================================================== */
 const CONFIG = {
   APP_NAME: 'Moon Reflection',
-  VERSION: '1.4.0',
+  VERSION: '1.6.0',
 
   /* ------------------------------------------------------------------
      SBA WEBSITE URL — the ONE place to configure the future website.
@@ -18,11 +18,12 @@ const CONFIG = {
   /* Contact link for the menu (mailto: or https:). Empty = Coming soon. */
   CONTACT_URL: '',
 
-  /* Readings (meaning + guidance) live in MOON_READINGS (js/content.js).
-     Moons without a reading show a preview and "SBA interpretation coming soon".
-     Set to false to hide all clearly labelled demonstration readings
-     (for example before an App Store release). */
-  SHOW_DEMO_READINGS: true,
+  /* Readings: hand-written ones live in MOON_READINGS (js/content.js); all
+     other Moons get a reading from the SBA Interpretation Engine, built from
+     the library in js/library.js. Draft readings are always labelled
+     "Draft interpretation · awaiting review". Set to false to show ONLY
+     approved SBA interpretations (others then show general guidance). */
+  SHOW_DRAFT_READINGS: true,
 
   /* Lunar Timeline range (UTC dates). Expand by changing these two values.
      Verified Sun/Moon placements currently cover 2020–2045; events outside

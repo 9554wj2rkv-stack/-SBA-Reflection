@@ -463,6 +463,61 @@ details.d-row .d-body p+p{margin-top:.6rem}
 .entry-meaning .meaning-card{background:none;border:0;padding:.2rem .4rem;-webkit-backdrop-filter:none;backdrop-filter:none}
 
 /* =========================================================
+   MOON-GUIDED REFLECTION
+   ========================================================= */
+.rg{border-radius:18px;padding:.7rem .85rem .75rem;margin:.1rem 0 .9rem;transition:opacity .22s ease}
+.rg-head{display:flex;align-items:center;gap:.7rem}
+.rg-head .moon-img{width:38px}
+.rg-id{flex:1;min-width:0}
+.rg-phase{font-family:var(--serif);font-size:1.12rem;line-height:1.2;color:var(--text)}
+.rg-chips{display:flex;flex-wrap:wrap;gap:.1rem .7rem;margin-top:.1rem}
+.rg-chip{display:inline-flex;align-items:center;gap:.28rem;font-size:.8rem;color:var(--gold-2);white-space:nowrap}
+.rg-chip svg{width:13px;height:13px;color:var(--gold)}
+.rg-chip.pending{color:var(--muted)}
+.rg-toggle{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--gold-soft);background:transparent;color:var(--gold);display:grid;place-items:center;padding:0}
+.rg-toggle svg{width:18px;height:18px;transform:rotate(-90deg);transition:transform .2s}
+.rg.compact .rg-toggle svg{transform:rotate(90deg)}
+body.kb-open .rg:not(.force-open) .rg-toggle svg{transform:rotate(90deg)}
+.rg-focus{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:.6rem 0 0;line-height:1.5}
+.rg.compact .rg-focus,body.kb-open .rg:not(.force-open) .rg-focus{cursor:pointer}
+.rg-theme{font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.3;color:var(--gold-2);margin:.35rem 0 .3rem}
+.rg-text{font-size:.94rem;line-height:1.55;color:#E4E8EF}
+.rg-src{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .7rem;margin:.5rem 0 0}
+.rg .rg-src .badge{border:0;background:none;padding:0;font-size:.62rem;letter-spacing:.14em;white-space:normal;text-align:left;line-height:1.4;color:var(--muted)}
+.rg .rg-src .badge.demo{color:#CFC3F5}
+.rg .rg-src .badge.ok{color:var(--ok)}
+.rg .rg-src .rm-when{font-size:.74rem;color:var(--muted)}
+.rg.compact .rg-more,body.kb-open .rg:not(.force-open) .rg-more{display:none}
+body.kb-open .rg:not(.force-open){padding:.5rem .75rem .55rem;margin-bottom:.6rem}
+body.kb-open .rg:not(.force-open) .rg-head .moon-img{width:30px}
+body.kb-open .rg:not(.force-open) .rg-focus{margin-top:.35rem}
+.rg~.q-text{font-size:1.75rem;margin-top:0}
+.rg-help{margin-top:.45rem;border-top:1px solid rgba(231,185,110,.16)}
+.rg-help summary{list-style:none;display:flex;align-items:center;gap:.6rem;min-height:46px;cursor:pointer;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text)}
+.rg-help summary::-webkit-details-marker{display:none}
+.rg-help summary .chev{margin-left:auto;transition:transform .2s}
+.rg-help[open] summary .chev{transform:rotate(90deg)}
+.rg-help-ic{color:var(--gold);display:grid;place-items:center}
+.rg-help-ic svg{width:20px;height:20px}
+.rg-starters{list-style:none;margin:.1rem 0 .4rem;padding:0}
+.rg-starters li{position:relative;padding:.45rem 0 .45rem 1.3rem;font-family:var(--serif);font-size:1.12rem;line-height:1.4;color:var(--text)}
+.rg-starters li::before{content:"";position:absolute;left:.15rem;top:.95rem;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(231,185,110,.6)}
+.rg-note{font-size:.76rem;color:var(--muted);margin-bottom:.2rem}
+.q-focus{display:block;font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.1rem}
+
+/* =========================================================
+   INTERPRETATION ENGINE / LIBRARY
+   ========================================================= */
+.reading-version{font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin-top:.45rem}
+.rg .rg-src .rg-ver{font-size:.7rem;color:var(--muted)}
+.em-note{margin:.2rem .4rem .4rem}
+.lib-link .g-label{display:flex;flex-direction:column;line-height:1.25}
+.lib-link .lib-link-sub{font-family:var(--sans);font-size:.8rem;color:var(--text-2);margin-top:.15rem}
+.lib-card .gd-list{margin:0}
+.lib-card .gd-list li{font-size:.95rem}
+.lib-card .mb-kicker{margin:.3rem 0 .4rem}
+
+/* =========================================================
    Tab bar
    ========================================================= */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);max-width:none;
